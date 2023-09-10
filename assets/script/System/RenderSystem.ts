@@ -14,7 +14,6 @@ export class RenderSystem implements ecs.System {
         const needRenderEntitys = ecs.ECSQuery.withComsBoth([PositionComponent, RenderComponent])
         for (const entity of needRenderEntitys) {
             this.renderPosition(entity)
-
         }
     }
 

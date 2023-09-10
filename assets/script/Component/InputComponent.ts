@@ -5,6 +5,7 @@ const { ccclass, property } = _decorator;
 @ecs.ECSDecorator.registerECSComName('InputComponent')
 @ccclass('InputComponent')
 export class InputComponent extends ecs.ECSComponent {
+    
     start() {
 
     }

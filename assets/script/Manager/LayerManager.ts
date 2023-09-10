@@ -1,5 +1,7 @@
-import { Node } from 'cc';
-import { ecs } from '../Core/ECS';
+import { Node } from "cc"
+import { ecs } from '../Core/ECS'
+import { layerConfig } from "../Config/Interface"
+import { LayerIdEnum } from "../Config/Enum"
 
 
 
@@ -8,8 +10,10 @@ import { ecs } from '../Core/ECS';
 export class LayerManager {
     static layersPool: Map<number, Node> = new Map()
 
-    init(): void {
+    static playerLayer: Node = null
 
+    static init(): void {
+        this.playerLayer = this.layersPool.get(LayerIdEnum.playerLayer)
     }
 
     static setLayer(layerConfig: layerConfig) {
@@ -29,7 +33,4 @@ export class LayerManager {
     }
 }
 
-interface layerConfig {
-    id: number
-    layer: Node
-}
+

@@ -91,7 +91,7 @@ export module ecs {
     }
 
     export class ECSComponent extends Component {
-        static comName: string = "www"
+        static comName: string = ""
 
         public entity: Entity
     }

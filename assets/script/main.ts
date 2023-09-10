@@ -1,5 +1,6 @@
-import { _decorator, Component, Node, Input, input } from 'cc';
 import { ecs } from "./Core/ECS"
+import { _decorator, Component, Node, Input, input } from 'cc';
+
 
 import { RootSystem } from './System/RootSystem';
 
@@ -61,6 +62,7 @@ export class main extends Component {
     //** 层级管理器初始化 */
     private initLayerManager() {
         LayerManager.setLayer({ id: LayerIdEnum.playerLayer, layer: this.playerLayer })
+        LayerManager.init()
     }
 
     //** 实体管理器初始化 */

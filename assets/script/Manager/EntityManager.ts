@@ -1,6 +1,8 @@
-import { LayerIdEnum } from "../Config/Enum"
-import { LayerManager } from "../Manager/LayerManager"
 import { ecs } from "../Core/ECS"
+import { LayerManager } from "../Manager/LayerManager"
+import { entityConfig } from "../Config/Interface"
+
+
 
 
 
@@ -27,9 +29,5 @@ export class EntityManager {
 
 }
 
-type ctor<T = unknown> = new (...args: any[]) => T;
-export interface entityConfig {
-    name: string
-    layerId: number
-    components: Array<ctor<ecs.ECSComponent>>
-}
+
+
