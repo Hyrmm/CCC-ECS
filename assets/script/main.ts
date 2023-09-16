@@ -1,12 +1,9 @@
 import { ecs } from "./Core/ECS"
 import { _decorator, Component, Node, Input, input } from 'cc';
-
-
 import { RootSystem } from './System/RootSystem';
-
-import { InputListenerSystem } from "./System/InputListenerSystem"
 import { RenderSystem } from './System/RenderSystem';
-
+import { MovementSystem } from "./System/MovementSystem";
+import { InputListenerSystem } from "./System/InputListenerSystem"
 import { LayerManager } from "./Manager/LayerManager"
 import { EntityManager } from "./Manager/EntityManager"
 
@@ -27,9 +24,10 @@ export class main extends Component {
 
 
     private rootSystem: RootSystem = new RootSystem()
-
     private renderSystem: RenderSystem | null
+    private movementSystem: MovementSystem | null
     private inputListenerSystem: InputListenerSystem | null
+
 
     protected onLoad(): void {
 
@@ -49,14 +47,16 @@ export class main extends Component {
     private initSystem() {
 
         this.renderSystem = this.rootSystem.add(new RenderSystem())
-
+        this.movementSystem = this.rootSystem.add(new MovementSystem())
         this.inputListenerSystem = this.rootSystem.add(new InputListenerSystem())
+
     }
 
     //** 输入监听初始化 */
     private initInputListener() {
         input.on(Input.EventType.KEY_UP, this.inputListenerSystem.onKeyUp, this.inputListenerSystem);
         input.on(Input.EventType.KEY_DOWN, this.inputListenerSystem.onKeyDown, this.inputListenerSystem);
+        input.on(Input.EventType.KEY_PRESSING, this.inputListenerSystem.onKeyPressing, this.inputListenerSystem);
     }
 
     //** 层级管理器初始化 */

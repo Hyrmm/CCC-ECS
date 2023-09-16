@@ -2,7 +2,7 @@ import { ecs } from "../Core/ECS"
 
 
 // 根系统调用其他系统逻辑
-export class RootSystem implements ecs.System {
+export class RootSystem extends ecs.System {
     public priority: number = 999
     public managedECSComponents = []
 

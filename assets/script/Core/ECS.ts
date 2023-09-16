@@ -1,3 +1,11 @@
+/*
+ * @Author: hyrm 1358188945@qq.com
+ * @Date: 2023-08-06 15:02:17
+ * @LastEditors: hyrm 1358188945@qq.com
+ * @LastEditTime: 2023-09-16 21:14:03
+ * @FilePath: \MyGame\assets\script\core\ECS.ts
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import { Component, Node } from "cc"
 
 
@@ -13,6 +21,11 @@ export module ecs {
 
     type ctor<T = unknown> = new (...args: any[]) => T;
 
+    interface ICom {
+        entity: Entity
+    }
+
+    window['ecs'] = ecs
 
     export const systemPool: systemPool = []
     export const entityPool: entityPool = []
@@ -21,7 +34,9 @@ export module ecs {
 
     export class System {
         public priority: number
-        update(dt?: number): void { }
+        protected lastUpdateTime: number
+        public update(dt?: number): void {
+        }
     }
 
     export class Entity extends Node {
@@ -84,15 +99,14 @@ export module ecs {
             return this.name2ECSComponent.get(com['comName']) as T
         }
 
-        public hasCom<T extends ECSComponent>(com: ctor<T>): boolean {
+        public hasCom(com: ctor<ICom>): boolean {
             return this.name2ECSComponent.has(com['comName'])
         }
 
     }
 
-    export class ECSComponent extends Component {
+    export class ECSComponent extends Component implements ICom {
         static comName: string = ""
-
         public entity: Entity
     }
 
@@ -107,11 +121,11 @@ export module ecs {
     }
 
     export class ECSQuery {
-        static withCom<T extends ECSComponent>(comCtor: ctor<T>): Array<Entity> {
+        static withCom(comCtor: ctor<ICom>): Array<Entity> {
             return comName2EntityPool.get(comCtor['comName'])
         }
 
-        static withComs<T extends ECSComponent>(comCtors: Array<ctor<T>>): Array<Entity> {
+        static withComs(...comCtors: ctor<ICom>[]): Array<Entity> {
             let resultEntitys = []
 
             comCtors.forEach(
@@ -122,11 +136,11 @@ export module ecs {
 
             return resultEntitys
         }
-        static withComsBoth<T extends ECSComponent>(comCtors: Array<ctor<T>>): Array<Entity> {
+        static withComsBoth(...comCtors: ctor<ICom>[]): Array<Entity> {
             let resultEntitys = []
 
             const checkCount = comCtors.length
-            const preEntitysArray = this.withComs(comCtors)
+            const preEntitysArray = this.withComs(...comCtors)
             const record: Map<Entity, number> = new Map()
 
             for (const entity of preEntitysArray) {
@@ -146,9 +160,9 @@ export module ecs {
             return resultEntitys
         }
 
-        static withComsButWithoutCom<T extends ECSComponent>(comCtors: Array<ctor<T>>, withoutCom: ctor<T>) {
+        static withComsButWithoutCom(comCtors: Array<ctor<ICom>>, withoutCom: ctor<ICom>) {
 
-            const withComs = this.withComs(comCtors)
+            const withComs = this.withComs(...comCtors)
             const resultEntitys = withComs.filter((entity) => entity.hasCom(withoutCom))
 
 

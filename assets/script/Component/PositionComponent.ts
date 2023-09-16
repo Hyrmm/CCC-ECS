@@ -1,11 +1,11 @@
 import { ecs } from "../Core/ECS"
-import { _decorator, Vec3 } from 'cc';
+import { _decorator, Vec3,Vec2 } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ecs.ECSDecorator.registerECSComName('PositionComponent')
 @ccclass('PositionComponent')
 export class PositionComponent extends ecs.ECSComponent {
-    public position: Vec3 = new Vec3(0, 0)
+    public position: Vec2 = new Vec2(0, 0)
 
     start() {
 

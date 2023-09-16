@@ -1,6 +1,7 @@
 import { ecs } from "../Core/ECS"
 import { LayerManager } from "../Manager/LayerManager"
 import { entityConfig } from "../Config/Interface"
+import { playerEntityConfig } from "../Config/Entity"
 
 
 
@@ -11,9 +12,10 @@ export class EntityManager {
 
     static init() {
         this.entitysPool = ecs.entityPool
+        this.createEntity(playerEntityConfig)
     }
 
-
+    
     static createEntity(entityConfig: entityConfig) {
 
         const entity = ecs.Entity.createEntity(entityConfig.name)

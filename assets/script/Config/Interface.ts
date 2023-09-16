@@ -10,6 +10,7 @@ export interface entityConfig {
     name: string
     layerId: number
     components: Array<ctor<ecs.ECSComponent>>
+    moveClipsName?: string
 }
 
 export interface playerEntity extends entityConfig {
