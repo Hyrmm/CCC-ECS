@@ -6,6 +6,7 @@ import { MovementSystem } from "./System/MovementSystem";
 import { InputListenerSystem } from "./System/InputListenerSystem"
 import { LayerManager } from "./Manager/LayerManager"
 import { EntityManager } from "./Manager/EntityManager"
+import { AssetsManager } from "./Manager/AssetsManager";
 
 
 
@@ -30,11 +31,12 @@ export class main extends Component {
 
 
     protected onLoad(): void {
-
-        this.initSystem()
-        this.initLayerManager()
-        this.initInputListener()
-        this.initEntityManager()
+        this.initAssetsManager(() => {
+            this.initSystem()
+            this.initLayerManager()
+            this.initInputListener()
+            this.initEntityManager()
+        })
     }
 
     update(deltaTime: number) {
@@ -49,6 +51,7 @@ export class main extends Component {
         this.renderSystem = this.rootSystem.add(new RenderSystem())
         this.movementSystem = this.rootSystem.add(new MovementSystem())
         this.inputListenerSystem = this.rootSystem.add(new InputListenerSystem())
+        console.log(`[初始化]:System 完成`)
 
     }
 
@@ -57,17 +60,25 @@ export class main extends Component {
         input.on(Input.EventType.KEY_UP, this.inputListenerSystem.onKeyUp, this.inputListenerSystem);
         input.on(Input.EventType.KEY_DOWN, this.inputListenerSystem.onKeyDown, this.inputListenerSystem);
         input.on(Input.EventType.KEY_PRESSING, this.inputListenerSystem.onKeyPressing, this.inputListenerSystem);
+        console.log(`[初始化]:InputListener 完成`)
     }
 
     //** 层级管理器初始化 */
     private initLayerManager() {
         LayerManager.setLayer({ id: LayerIdEnum.playerLayer, layer: this.playerLayer })
         LayerManager.init()
+
+
     }
 
     //** 实体管理器初始化 */
     private initEntityManager() {
         EntityManager.init()
+    }
+
+    //** 资源管理器初始化 */
+    private initAssetsManager(finishCb) {
+        AssetsManager.init(finishCb)
     }
 
 

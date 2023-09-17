@@ -20,7 +20,7 @@ export class RenderSystem extends ecs.System {
     // 渲染位置
     renderPosition(entity: ecs.Entity) {
         const positionComponent = entity.getCom(PositionComponent)
-        // entity.setPosition(positionComponent.position)
+        entity.setPosition(positionComponent.position)
     }
 
     // 渲染方向

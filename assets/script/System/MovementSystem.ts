@@ -1,5 +1,5 @@
 import { ecs } from "../Core/ECS"
-import { Vec2 } from "cc"
+import { Vec3 } from "cc"
 // import { PositionComponent } from "../Component/PositionComponent"
 // import { InputComponent } from "../Component/InputComponent"
 // import { RenderComponent } from "../Component/RenderComponent"
@@ -35,7 +35,7 @@ export class MovementSystem extends ecs.System {
             if (directionX != 0 || directionY != 0) {
                 console.log(position)
             }
-            position.add(new Vec2(timeOffset * velocityX * directionX, timeOffset * velocityY * directionY))
+            position.add(new Vec3(timeOffset * velocityX * 100 * directionX, timeOffset * velocityY * 100 * directionY, 0))
 
 
         }

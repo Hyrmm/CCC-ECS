@@ -14,6 +14,7 @@ export class LayerManager {
 
     static init(): void {
         this.playerLayer = this.layersPool.get(LayerIdEnum.playerLayer)
+        console.log(`[初始化]:LayerManager 完成`)
     }
 
     static setLayer(layerConfig: layerConfig) {

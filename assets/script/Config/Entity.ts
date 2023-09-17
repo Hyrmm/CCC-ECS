@@ -7,6 +7,7 @@ export const playerEntityConfig: playerEntity = {
     name: "player",
     layerId: LayerIdEnum.playerLayer,
     components: [PositionComponent, PhysicalComponent, InputComponent, RenderComponent],
-    velocity: [1, 1],
-    moveClipsName: "captain"
+    velocity: [2, 2],
+    moveClipsName: "captain",
+    prefebName: "player"
 }
