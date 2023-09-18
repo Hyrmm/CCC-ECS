@@ -7,9 +7,7 @@ const { ccclass, property } = _decorator;
 @ccclass('InputComponent')
 export class InputComponent extends ecs.ECSComponent {
 
-    public keyUpCode: number | null
-    public keyDownCode: number | null
-    public keyPresingCode: number | null
+    public keyPresingCode: Array<number> = []
 
     start() {
 

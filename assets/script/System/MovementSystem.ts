@@ -44,7 +44,7 @@ export class MovementSystem extends ecs.System {
     private getEntityDirection(entity: ecs.Entity): { directionX: number, directionY: number } {
         let directionX, directionY
         const inputCom = entity.getCom(InputComponent)
-        const curPresingKeyCode = inputCom.keyDownCode || inputCom.keyPresingCode
+        const curPresingKeyCode = inputCom.keyPresingCode[inputCom.keyPresingCode.length - 1]
 
         switch (curPresingKeyCode) {
             case KeyCode.up: {

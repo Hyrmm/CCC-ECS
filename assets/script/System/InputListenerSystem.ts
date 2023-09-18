@@ -15,39 +15,48 @@ import { InputComponent } from "../Component/ECSComponent"
 export class InputListenerSystem extends ecs.System {
 
     public priority: number = 1
-
-    private keyUpCode: KeyCode
-    private keyDownCode: KeyCode
-    private keyPresingCode: KeyCode
+    private keyPresingCode: Array<KeyCode> = []
 
 
 
     public onKeyUp(even: EventKeyboard) {
-        this.keyUpCode = even.keyCode
-        this.updateKeyCode()
+        this.updateKeyCode('up', even.keyCode)
     }
     public onKeyDown(even: EventKeyboard) {
-        this.keyDownCode = even.keyCode
-        this.updateKeyCode()
+        this.updateKeyCode('down', even.keyCode)
     }
     public onKeyPressing(even: EventKeyboard) {
-        this.keyPresingCode = even.keyCode
-        this.updateKeyCode()
+        this.updateKeyCode('presing', even.keyCode)
     }
 
 
-    public updateKeyCode() {
+    public updateKeyCode(type, keyCode) {
 
-        // 当长按的键被抬起时，置空键数据
-        if (this.keyUpCode && (this.keyDownCode || this.keyPresingCode) && (this.keyUpCode == this.keyPresingCode || this.keyUpCode == this.keyDownCode)) {
-            this.keyPresingCode = this.keyUpCode = this.keyDownCode = null
+        switch (type) {
+            case "up": {
+                if (this.keyPresingCode.includes(keyCode)) {
+                    for (const [index, curKeyCode] of this.keyPresingCode.entries()) {
+                        if (curKeyCode == keyCode) {
+                            this.keyPresingCode.splice(index, 1)
+                        }
+                    }
+                }
+                break
+            }
+            case "down": {
+                !this.keyPresingCode.includes(keyCode) && this.keyPresingCode.push(keyCode)
+                break
+            }
+            case "presing": {
+                !this.keyPresingCode.includes(keyCode) && this.keyPresingCode.push(keyCode)
+                break
+            }
         }
+
 
         const resultEntitys = ecs.ECSQuery.withCom(InputComponent)
         for (const entity of resultEntitys) {
             const inputCom = entity.getComponent(InputComponent)
-            inputCom.keyUpCode = this.keyUpCode
-            inputCom.keyDownCode = this.keyDownCode
             inputCom.keyPresingCode = this.keyPresingCode
         }
     }
