@@ -12,6 +12,7 @@ import { AssetsManager } from "./Manager/AssetsManager";
 
 
 import { LayerIdEnum } from "./Config/Enum"
+import { NetManager } from "./Manager/NetManager";
 
 
 const { ccclass, property } = _decorator;
@@ -36,6 +37,7 @@ export class main extends Component {
             this.initLayerManager()
             this.initInputListener()
             this.initEntityManager()
+            this.initNetManager()
         })
     }
 
@@ -79,6 +81,11 @@ export class main extends Component {
     //** 资源管理器初始化 */
     private initAssetsManager(finishCb) {
         AssetsManager.init(finishCb)
+    }
+
+    // ** 网络管理区初始化
+    private initNetManager() {
+        NetManager.init()
     }
 
 
