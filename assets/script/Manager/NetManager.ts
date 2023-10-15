@@ -1,26 +1,41 @@
 import { error } from "cc"
 import * as pb from "../Proto/pb"
 import { protoId2Name } from "../Proto/protoMap"
+import { EventManager } from "./EventManager"
 export class NetManager {
     static webSocket: WebSocket
 
     static heartbeatTimer: number = 5000
     static heartbeatInterval: number
-
-
-
+    static serverTiem: string
 
     static init() {
-        this.connect()
+        this.doConnect()
     }
 
 
+    static onOpen(ev: Event) {
+        // 心跳检测
+        if (this.heartbeatInterval) {
+            this.clearHearbeatInterval()
+        }
 
+        this.heartbeatInterval = setInterval(this.sendHeartbeat.bind(this), this.heartbeatTimer)
+    }
 
+    static onError(ev: Event) {
+        this.clearHearbeatInterval()
+    }
 
-    static connect() {
+    static onClose(ev: Event) {
+        console.log(`[clientClose]:${ev}`)
+        this.clearHearbeatInterval()
+    }
+
+    static doConnect() {
         this.webSocket = new WebSocket("ws://127.0.0.1:8888")
-        const self = this;
+        this.webSocket.binaryType = "arraybuffer"
+        const self = this
         this.webSocket.onopen = (ev) => {
             self.onOpen(ev)
         }
@@ -31,54 +46,62 @@ export class NetManager {
             self.onError(ev)
         }
         this.webSocket.onmessage = (ev) => {
-            self.onMessage(ev)
+            self.recvData(ev)
         }
     }
 
-    static reconnect() {
-        if (this.webSocket) {
+    static reConnect() {
+        console.log(`[reConnect]:${this.webSocket}`)
+        if (this.webSocket && this.webSocket.readyState != this.webSocket.OPEN) {
             this.webSocket = null
+            this.doConnect()
         }
 
-        this.connect()
-
     }
 
+    static recvData(ev: MessageEvent) {
+        const commonData = pb.decodeCommonData(new Uint8Array(ev.data as ArrayBuffer))
+        const protoId = commonData.protoId
+        const protoName = protoId2Name[protoId]
+        if (!protoName) return console.error("[recvData]协议不存在!")
 
-    static onOpen(ev: Event) {
-        // 心跳检测
-        this.heartbeatInterval = setInterval(this.heartbeat.bind(this), this.heartbeatTimer)
+        const bodyData = pb[`decode${protoName}`](commonData.body)
 
+        // 心跳特殊处理
+        if (protoId == 1000) {
+            this.recvHeartbeat(bodyData as pb.C2S_HeartBeat)
+        }
+
+        // 分发协议消息
+        EventManager.emit(protoName, bodyData)
+
+        console.log("%c↓", "color:red;", `[recvData]:${protoId}|${protoName}:`, bodyData)
     }
-    static onError(ev: Event) {
-        clearInterval(this.heartbeatInterval);
 
-    }
-    static onClose(ev: Event) {
-        clearInterval(this.heartbeatInterval);
-        this.connect()
-    }
-
-    static onMessage(ev: Event) {
-
-    }
-
-    static heartbeat() {
-        const data: pb.C2S_HeartBeat = { serverTime: 100 }
-
-        this.sendData(1001, data)
-    }
     static sendData(protoId: number, data: any) {
         const protoName = protoId2Name[protoId]
-        if (!protoName) return
+
+        if (!protoName) return console.error("[sendData]协议不存在!")
 
         const dataBody = pb[`encode${protoName}`](data)
         const commonData = pb.encodeCommonData({ protoId: protoId, body: dataBody })
         this.webSocket.send(commonData)
-        console.log(`[sendData]:${protoId}|${protoName}:`, data)
+
+        console.log("%c↑", "color: green;", `[sendData]:${protoId}|${protoName}:`, data)
     }
 
+    static sendHeartbeat() {
+        const data: pb.C2S_HeartBeat = { serverTime: this.serverTiem }
+        this.sendData(1001, data)
+    }
 
+    static recvHeartbeat(data: pb.C2S_HeartBeat) {
+        this.serverTiem = data.serverTime
+    }
 
+    static clearHearbeatInterval() {
+        clearInterval(this.heartbeatInterval)
+        this.heartbeatInterval = 0
+    }
 
 }

@@ -1,4 +1,4 @@
-import { Prefab, instantiate } from "cc"
+import { Prefab, instantiate, log } from "cc"
 import { ecs } from "../Core/ECS"
 import { LayerManager } from "../Manager/LayerManager"
 import { entityConfig } from "../Config/Interface"
@@ -15,7 +15,6 @@ export class EntityManager {
     static init() {
         this.entitysPool = ecs.entityPool
         this.createEntity(playerEntityConfig)
-        console.log(`[初始化]:EntityManager 完成`)
     }
 
 

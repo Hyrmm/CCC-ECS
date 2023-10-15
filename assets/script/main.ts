@@ -1,5 +1,5 @@
 import { ecs } from "./Core/ECS"
-import { _decorator, Component, Node, Input, input } from 'cc';
+import { _decorator, Component, Node, Input, input, game, Game } from 'cc';
 import { RootSystem } from './System/RootSystem';
 import { RenderSystem } from './System/RenderSystem';
 import { MovementSystem } from "./System/MovementSystem";
@@ -34,10 +34,12 @@ export class main extends Component {
     protected onLoad(): void {
         this.initAssetsManager(() => {
             this.initSystem()
+            this.initGameEvent()
             this.initLayerManager()
             this.initInputListener()
             this.initEntityManager()
             this.initNetManager()
+
         })
     }
 
@@ -53,7 +55,6 @@ export class main extends Component {
         this.renderSystem = this.rootSystem.add(new RenderSystem())
         this.movementSystem = this.rootSystem.add(new MovementSystem())
         this.inputListenerSystem = this.rootSystem.add(new InputListenerSystem())
-        console.log(`[初始化]:System 完成`)
 
     }
 
@@ -62,15 +63,19 @@ export class main extends Component {
         input.on(Input.EventType.KEY_UP, this.inputListenerSystem.onKeyUp, this.inputListenerSystem);
         input.on(Input.EventType.KEY_DOWN, this.inputListenerSystem.onKeyDown, this.inputListenerSystem);
         input.on(Input.EventType.KEY_PRESSING, this.inputListenerSystem.onKeyPressing, this.inputListenerSystem);
-        console.log(`[初始化]:InputListener 完成`)
+    }
+
+    //** 游戏事件监听初始化 */
+    private initGameEvent() {
+        game.on(Game.EVENT_SHOW, () => {
+            NetManager.reConnect()
+        })
     }
 
     //** 层级管理器初始化 */
     private initLayerManager() {
         LayerManager.setLayer({ id: LayerIdEnum.playerLayer, layer: this.playerLayer })
         LayerManager.init()
-
-
     }
 
     //** 实体管理器初始化 */
@@ -83,13 +88,10 @@ export class main extends Component {
         AssetsManager.init(finishCb)
     }
 
-    // ** 网络管理区初始化
+    //** 网络管理器初始化 */
     private initNetManager() {
         NetManager.init()
     }
-
-
-
 }
 
 

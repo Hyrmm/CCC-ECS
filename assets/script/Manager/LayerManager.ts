@@ -8,13 +8,12 @@ import { LayerIdEnum } from "../Config/Enum"
 
 
 export class LayerManager {
+    
     static layersPool: Map<number, Node> = new Map()
-
     static playerLayer: Node = null
 
     static init(): void {
         this.playerLayer = this.layersPool.get(LayerIdEnum.playerLayer)
-        console.log(`[初始化]:LayerManager 完成`)
     }
 
     static setLayer(layerConfig: layerConfig) {
