@@ -28,7 +28,7 @@ export class NetManager {
     }
 
     static onClose(ev: Event) {
-        console.log(`[clientClose]:${ev}`)
+        console.log(`[clientClose]:`, ev)
         this.clearHearbeatInterval()
     }
 

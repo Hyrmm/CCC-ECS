@@ -9,11 +9,7 @@ export class BaseModel {
      * @param callback 参数
      * @param target 目标
      */
-    protected regeisterListener<T extends BaseModel>(msgName: string, callback, target: T) {
-        const cb = function () {
-
-        }
-
-        EventManager.on(msgName, cb.bind(target), target)
+    protected regeisterListener<T extends BaseModel>(msgName: string, callback, target?: T) {
+        EventManager.on(msgName, callback, target ? target : this)
     }
 }
