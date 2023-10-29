@@ -39,7 +39,6 @@ export class main extends Component {
             this.initInputListener()
             this.initEntityManager()
             this.initNetManager()
-
         })
     }
 
