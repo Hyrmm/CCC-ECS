@@ -8,12 +8,19 @@ import { LayerIdEnum } from "../Config/Enum"
 
 
 export class LayerManager {
-    
+
     static layersPool: Map<number, Node> = new Map()
     static playerLayer: Node = null
 
-    static init(): void {
+    static init(layerList: Array<{ id: number, layer: Node }>): void {
+        this.initSetLayer(layerList)
         this.playerLayer = this.layersPool.get(LayerIdEnum.playerLayer)
+    }
+
+    static initSetLayer(layerList: Array<{ id: number, layer: Node }>): void {
+        for (const layer of layerList) {
+            this.setLayer({ id: layer.id, layer: layer.layer })
+        }
     }
 
     static setLayer(layerConfig: layerConfig) {

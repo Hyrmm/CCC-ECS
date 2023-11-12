@@ -1,13 +1,13 @@
 import { error } from "cc"
 import * as pb from "../Proto/pb"
-import { protoId2Name } from "../Proto/protoMap"
+import { protoId2Name, protoName2Id, EnumProtoName } from "../Proto/protoMap"
 import { EventManager } from "./EventManager"
 export class NetManager {
     static webSocket: WebSocket
 
     static heartbeatTimer: number = 5000
     static heartbeatInterval: number
-    static serverTiem: string
+    static serverTiem: number
 
     static init() {
         this.doConnect()
@@ -75,7 +75,11 @@ export class NetManager {
         // 分发协议消息
         EventManager.emit(protoName, bodyData)
 
-        console.log("%c↓", "color:red;", `[recvData]:${protoId}|${protoName}:`, bodyData)
+        const dirtyProtoList = [protoName2Id[EnumProtoName.S2C_Frames]]
+        if (!dirtyProtoList.includes(protoId)) {
+            console.log("%c↓", "color:red;", `[recvData]:${protoId}|${protoName}:`, bodyData)
+        }
+
     }
 
     static sendData(protoId: number, data: any) {

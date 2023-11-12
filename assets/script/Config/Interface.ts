@@ -3,7 +3,7 @@ import { ecs } from "../Core/ECS"
 
 
 
-type ctor<T = unknown> = new (...args: any[]) => T;
+type ctor<T = unknown> = new (...args: any[]) => T
 
 
 export interface entityConfig {

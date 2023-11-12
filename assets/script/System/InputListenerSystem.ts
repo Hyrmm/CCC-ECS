@@ -1,11 +1,3 @@
-/*
- * @Author: hyrm 1358188945@qq.com
- * @Date: 2023-08-13 01:08:57
- * @LastEditors: hyrm 1358188945@qq.com
- * @LastEditTime: 2023-09-17 02:10:08
- * @FilePath: \MyGame\assets\script\System\InputListenerSystem.ts
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
 import { ecs } from "../Core/ECS"
 import { EventKeyboard, KeyCode } from "cc"
 import { InputComponent } from "../Component/ECSComponent"
@@ -28,7 +20,6 @@ export class InputListenerSystem extends ecs.System {
     public onKeyPressing(even: EventKeyboard) {
         this.updateKeyCode('presing', even.keyCode)
     }
-
 
     public updateKeyCode(type, keyCode) {
 
@@ -60,7 +51,6 @@ export class InputListenerSystem extends ecs.System {
             inputCom.keyPresingCode = this.keyPresingCode
         }
     }
-
 
     public update(dt?: number) {
 

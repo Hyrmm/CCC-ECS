@@ -13,6 +13,7 @@ import { AssetsManager } from "./Manager/AssetsManager";
 
 import { LayerIdEnum } from "./Config/Enum"
 import { NetManager } from "./Manager/NetManager";
+import { ModelsManager } from "./Manager/ModelsManager";
 
 
 const { ccclass, property } = _decorator;
@@ -21,7 +22,7 @@ const { ccclass, property } = _decorator;
 export class main extends Component {
 
     @property(Node)
-    playerLayer = null
+    playerLayer: Node = null
 
 
 
@@ -39,6 +40,7 @@ export class main extends Component {
             this.initInputListener()
             this.initEntityManager()
             this.initNetManager()
+            this.initModelsManager()
         })
     }
 
@@ -50,11 +52,9 @@ export class main extends Component {
 
     //** 系统初始化 */
     private initSystem() {
-
         this.renderSystem = this.rootSystem.add(new RenderSystem())
         this.movementSystem = this.rootSystem.add(new MovementSystem())
         this.inputListenerSystem = this.rootSystem.add(new InputListenerSystem())
-
     }
 
     //** 输入监听初始化 */
@@ -73,8 +73,9 @@ export class main extends Component {
 
     //** 层级管理器初始化 */
     private initLayerManager() {
-        LayerManager.setLayer({ id: LayerIdEnum.playerLayer, layer: this.playerLayer })
-        LayerManager.init()
+        const layerList = [{ id: LayerIdEnum.playerLayer, layer: this.playerLayer }]
+
+        LayerManager.init(layerList)
     }
 
     //** 实体管理器初始化 */
@@ -90,6 +91,11 @@ export class main extends Component {
     //** 网络管理器初始化 */
     private initNetManager() {
         NetManager.init()
+    }
+
+    //** 模型层管理器初始化 */
+    private initModelsManager() {
+        ModelsManager.init()
     }
 }
 
