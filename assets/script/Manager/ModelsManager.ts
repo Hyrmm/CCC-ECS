@@ -3,22 +3,29 @@ import { BaseModel } from "../Models/BaseModel"
 import { FramesModel } from "../Models/FramesModel"
 import { UserInfoModel } from "../Models/UserInfoModel"
 
-class ModelMap<T extends BaseModel> {
-    private map: Map<string, T> = new Map()
-    private array: Array<T> = []
+class ModelMap {
+    private map: Map<string, BaseModel> = new Map()
+    private array: Array<BaseModel> = []
 
-    // 添加实例
-    addInstance(key: string, instance: T): void {
+    /**
+    * 添加实例
+    * @param key model名
+    * @param instance model实例
+    */
+    addInstance(key: string, instance: BaseModel): void {
         this.map.set(key, instance)
         this.array.push(instance)
     }
 
-    // 获取实例
-    getInstance(key: string): T | undefined {
-        return this.map.get(key)
+    /**
+    * 获取实例
+    * @param key model名
+    */
+    getInstance<T extends BaseModel>(key: string): T {
+        return this.map.get(key) as T
     }
 
-    getAllInstance(): Array<T> {
+    getAllInstance(): Array<BaseModel> {
         return this.array
     }
 }
@@ -26,7 +33,7 @@ class ModelMap<T extends BaseModel> {
 
 export class ModelsManager {
 
-    static modelMap: ModelMap<Models> = new ModelMap
+    static modelMap: ModelMap = new ModelMap
 
     static init() {
         // 注册
@@ -37,7 +44,7 @@ export class ModelsManager {
     }
 
     static registerModels(): void {
-        this.modelMap.addInstance("FramesModel", new FramesModel)
+        this.modelMap.addInstance(FramesModel.name, new FramesModel)
     }
 
     static registerModelsListener(): void {
@@ -46,7 +53,14 @@ export class ModelsManager {
             model.initListener()
         }
     }
+
+    /**
+    * 获取model实例
+    * @param modelCls model类
+    */
+    static getModel<T extends BaseModel>(modelCls: ctor<T>): T {
+        return this.modelMap.getInstance(modelCls.name)
+    }
 }
 
-type Models = FramesModel | UserInfoModel
-
+type ctor<T = unknown> = new (...args: any[]) => T

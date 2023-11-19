@@ -41,6 +41,10 @@ export class MovementSystem extends ecs.System {
         }
     }
 
+    /**
+    * 获取实体朝向
+    * @param entity 实体实例
+    */
     private getEntityDirection(entity: ecs.Entity): { directionX: number, directionY: number } {
         let directionX, directionY
         const inputCom = entity.getCom(InputComponent)

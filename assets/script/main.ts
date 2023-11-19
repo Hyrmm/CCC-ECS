@@ -14,6 +14,7 @@ import { AssetsManager } from "./Manager/AssetsManager";
 import { LayerIdEnum } from "./Config/Enum"
 import { NetManager } from "./Manager/NetManager";
 import { ModelsManager } from "./Manager/ModelsManager";
+import { FramesManager } from "./Manager/FramesManager";
 
 
 const { ccclass, property } = _decorator;
@@ -41,6 +42,7 @@ export class main extends Component {
             this.initEntityManager()
             this.initNetManager()
             this.initModelsManager()
+            this.initFramesManager()
         })
     }
 
@@ -74,7 +76,6 @@ export class main extends Component {
     //** 层级管理器初始化 */
     private initLayerManager() {
         const layerList = [{ id: LayerIdEnum.playerLayer, layer: this.playerLayer }]
-
         LayerManager.init(layerList)
     }
 
@@ -96,6 +97,11 @@ export class main extends Component {
     //** 模型层管理器初始化 */
     private initModelsManager() {
         ModelsManager.init()
+    }
+
+    //** 帧同步管理器初始化 */
+    private initFramesManager() {
+        FramesManager.init()
     }
 }
 

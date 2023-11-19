@@ -1,8 +1,8 @@
 
 
 
-export const LayerIdEnum = {
-    playerLayer: 1
+export enum LayerIdEnum {
+    playerLayer = 1
 }
 
 
@@ -13,5 +13,9 @@ export const KeyCode = {
     right: 68
 }
 
+
+export enum MsgEnum {
+    SyncFrames
+}
 
 

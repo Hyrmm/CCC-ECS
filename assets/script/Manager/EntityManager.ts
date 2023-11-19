@@ -1,9 +1,9 @@
 import { Prefab, instantiate, log } from "cc"
 import { ecs } from "../Core/ECS"
 import { LayerManager } from "../Manager/LayerManager"
-import { entityConfig } from "../Config/Interface"
-import { playerEntityConfig } from "../Config/Entity"
+import { BaseEntity, playerEntityConfig } from "../Config/Entity"
 import { AssetsManager } from "./AssetsManager"
+import { I_EntityConfig } from "../Config/Entity"
 
 
 
@@ -18,12 +18,14 @@ export class EntityManager {
     }
 
 
-    static createEntity(entityConfig: entityConfig) {
+    static createEntity(entityConfig: I_EntityConfig) {
 
-        const entity = ecs.Entity.createEntity(entityConfig.name)
+        const entity = ecs.Entity.createEntity(BaseEntity, entityConfig.name)
 
         // 绑定组件
         entity.addComs(entityConfig.components)
+
+        this.setConfig(entityConfig, entity)
 
         // 绑定预制体
         if (entityConfig.prefebName) {
@@ -36,6 +38,18 @@ export class EntityManager {
         LayerManager.setEntity2Layer(entityConfig.layerId, entity)
 
         return entity
+    }
+
+    // 挂载配置
+    static setConfig(entityConfig: I_EntityConfig, entity: BaseEntity) {
+        if (entityConfig.velocity) {
+            
+        }
+    }
+
+    // 挂载层级
+    static set2Layer() {
+
     }
 
 

@@ -1,10 +1,11 @@
+import { BaseComponent } from "../Config/Component"
 import { ecs } from "../Core/ECS"
-import { _decorator } from 'cc';
-const { ccclass, property } = _decorator;
+import { _decorator } from 'cc'
+const { ccclass, property } = _decorator
 
 @ecs.ECSDecorator.registerECSComName('RenderComponent')
 @ccclass('RenderComponent')
-export class RenderComponent extends ecs.ECSComponent {
+export class RenderComponent extends BaseComponent {
     start() {
 
     }

@@ -1,9 +1,27 @@
 import { LayerIdEnum } from "../Config/Enum"
-import { playerEntity } from "../Config/Interface"
 import { InputComponent, PhysicalComponent, PositionComponent, RenderComponent } from "../Component/ECSComponent"
+import { ecs } from "../Core/ECS"
 
 
-export const playerEntityConfig: playerEntity = {
+export class BaseEntity extends ecs.Entity {
+    public config: I_EntityConfig
+}
+
+
+
+
+
+
+export interface I_EntityConfig {
+    name: string
+    layerId: number
+    components: Array<ctor<ecs.ECSComponent>>
+    moveClipsName?: string
+    prefebName?: string
+    velocity?: [number, number]
+}
+
+export const playerEntityConfig: I_EntityConfig = {
     name: "player",
     layerId: LayerIdEnum.playerLayer,
     components: [PositionComponent, PhysicalComponent, InputComponent, RenderComponent],
@@ -11,3 +29,6 @@ export const playerEntityConfig: playerEntity = {
     moveClipsName: "captain",
     prefebName: "player"
 }
+
+
+type ctor<T = unknown> = new (...args: any[]) => T

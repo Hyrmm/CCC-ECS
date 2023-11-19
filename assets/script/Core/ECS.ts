@@ -41,58 +41,83 @@ export module ecs {
             super(name)
         }
 
-        static createEntity(entityName: string): Entity {
-            const entity = new Entity(entityName)
+        /**
+         * 创建实体
+         * @param entityCls 实体类,用于自己拓展实体类，通过继承ecs.Entity即可
+         * @param entityName 实体名称
+        */
+        static createEntity<T extends Entity>(entityCls: ctor<T>, entityName: string): T {
+            const entity = new entityCls(entityName)
             entity.entityId = entityPool.push(entity) - 1
             return entity
         }
 
-        public addCom<T extends ECSComponent>(com: ctor<T>): void {
-            if (this.name2ECSComponent.has(com['comName'])) return
+        /**
+         * 向实体添加组件
+         * @param comCls 组件类
+        */
+        public addCom<T extends ECSComponent>(comCls: ctor<T>): void {
+            if (this.name2ECSComponent.has(comCls['comName'])) return
 
-            const comInstance = this.addComponent(com)
+            const comInstance = this.addComponent(comCls)
 
             comInstance.entity = this
 
             this.ECSComponents.push(comInstance)
-            this.name2ECSComponent.set(com['comName'], comInstance)
+            this.name2ECSComponent.set(comCls['comName'], comInstance)
 
-            if (comName2EntityPool.has(com['comName'])) {
-                comName2EntityPool.get(com['comName']).push(this)
+            if (comName2EntityPool.has(comCls['comName'])) {
+                comName2EntityPool.get(comCls['comName']).push(this)
             } else {
-                comName2EntityPool.set(com['comName'], [this])
+                comName2EntityPool.set(comCls['comName'], [this])
             }
         }
 
-        public addComs<T extends ECSComponent>(com: Array<ctor<T>>): void {
-            for (const componentCtor of com) {
+        /**
+         * 向实体添加组件
+         * @param comCls 组件类
+        */
+        public addComs<T extends ECSComponent>(comCls: Array<ctor<T>>): void {
+            for (const componentCtor of comCls) {
                 this.addCom(componentCtor)
             }
         }
 
-        public delCom<T extends ECSComponent>(com: ctor<T>) {
-            if (!this.name2ECSComponent.has(com['comName'])) return
+        /**
+         * 删除实体上组件
+         * @param comCls 组件类
+        */
+        public delCom<T extends ECSComponent>(comCls: ctor<T>) {
+            if (!this.name2ECSComponent.has(comCls['comName'])) return
 
-            const delCom = this.name2ECSComponent.get(com['comName'])
+            const delCom = this.name2ECSComponent.get(comCls['comName'])
 
             // 实体上组件缓存清除
-            this.name2ECSComponent.delete(com['comName'])
+            this.name2ECSComponent.delete(comCls['comName'])
 
             // 组件分类查询组件池清除
-            const comGroupEntityPool = comName2EntityPool.get(com['comName'])
+            const comGroupEntityPool = comName2EntityPool.get(comCls['comName'])
             const newEntityPool = comGroupEntityPool.filter((entity) => entity.entityId != this.entityId)
-            comName2EntityPool.set(com['comName'], newEntityPool)
+            comName2EntityPool.set(comCls['comName'], newEntityPool)
 
 
             delCom.destroy()
         }
 
-        public getCom<T extends ECSComponent>(com: ctor<T>): T {
-            return this.name2ECSComponent.get(com['comName']) as T
+        /**
+         * 获取实体上组件
+         * @param comCls 组件类
+        */
+        public getCom<T extends ECSComponent>(comCls: ctor<T>): T {
+            return this.name2ECSComponent.get(comCls['comName']) as T
         }
 
-        public hasCom(com: ctor<ICom>): boolean {
-            return this.name2ECSComponent.has(com['comName'])
+        /**
+         * 实体上是否有该组件
+         * @param comCls 组件类
+        */
+        public hasCom(comCls: ctor<ICom>): boolean {
+            return this.name2ECSComponent.has(comCls['comName'])
         }
 
     }
