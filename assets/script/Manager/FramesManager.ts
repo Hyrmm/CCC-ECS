@@ -14,36 +14,33 @@ export class FramesManager {
 
     static init() {
         this.framseModel = ModelsManager.getModel(FramesModel)
-        this.asyncInterval = setTimeout(this.async.bind(this), this.asyncTimer)
+        this.asyncInterval = setInterval(this.async.bind(this), this.asyncTimer)
     }
 
     /**
     * 同步帧数
     */
     static async() {
-        // 同步等待帧帧堆积
-        const pendingFramesLen = this.framseModel.pendingFrames.length
-        if (pendingFramesLen > 1) {
-            const curSyncTimer = 1000 / (pendingFramesLen / 3)
-            this.asyncTimer = curSyncTimer > 100 ? 100 : curSyncTimer
-            this.asyncInterval = setInterval(this.syncFrams.bind(this), this.asyncTimer)
-            return
-        }
-
         const frame = this.framseModel.pendingFrames.shift()
-        this.asyncTimer = 100
-        this.asyncInterval = setTimeout(this.async.bind(this), this.asyncTimer)
+        const pendingFramesLen = this.framseModel.pendingFrames.length
         console.log(`当前执行帧:`, frame, "剩余等待帧数量:", pendingFramesLen)
+
+        // 同步等待帧帧堆积
+        if (pendingFramesLen > 0) {
+            clearInterval(this.asyncInterval)
+            this.asyncInterval = setInterval(this.syncFrams.bind(this), this.asyncTimer / 10)
+        }
     }
 
     static syncFrams() {
-        const pendingFramesLen = this.framseModel.pendingFrames.length
         const frame = this.framseModel.pendingFrames.shift()
+        const pendingFramesLen = this.framseModel.pendingFrames.length
         console.log(`当前追溯帧:`, frame, "剩余等待帧数量:", pendingFramesLen)
 
-        if (pendingFramesLen < 1) {
+        // 同步完成修正状态
+        if (pendingFramesLen <= 0) {
             clearInterval(this.asyncInterval)
-            this.async()
+            this.asyncInterval = setInterval(this.async.bind(this), this.asyncTimer)
         }
     }
 
