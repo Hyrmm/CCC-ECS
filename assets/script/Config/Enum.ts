@@ -18,4 +18,8 @@ export enum MsgEnum {
     SyncFrames
 }
 
+export enum InputType {
+
+}
+
 

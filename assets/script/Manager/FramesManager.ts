@@ -1,8 +1,10 @@
 import { Enum } from "cc"
 import { FramesModel } from "../Models/FramesModel"
-import { S2C_Frames } from "../Proto/pb"
+import { C2S_Frames, S2C_Frames } from "../Proto/pb"
 import { ModelsManager } from "./ModelsManager"
 import { EventManager } from "./EventManager"
+import { NetManager } from "./NetManager"
+import { protoName2Id } from "../Proto/protoMap"
 
 export class FramesManager {
 
@@ -44,8 +46,13 @@ export class FramesManager {
         }
     }
 
-    static applyInputs() {
+    static applyInputs(type) {
+        const data: C2S_Frames = { playerMove: {} }
+        this.sendInputs(data)
+    }
 
+    static sendInputs(data: C2S_Frames) {
+        NetManager.sendData(protoName2Id.C2S_Frames, data)
     }
 
 

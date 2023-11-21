@@ -5,6 +5,7 @@ import { Vec3 } from "cc"
 // import { RenderComponent } from "../Component/RenderComponent"
 import { KeyCode } from "../Config/Enum"
 import { PositionComponent, InputComponent, PhysicalComponent } from "../Component/ECSComponent"
+import { FramesManager } from "../Manager/FramesManager"
 
 export class MovementSystem extends ecs.System {
 
@@ -17,9 +18,6 @@ export class MovementSystem extends ecs.System {
     public updateControllablePositon(dt: number) {
         const entitys = ecs.ECSQuery.withComsBoth(PositionComponent, PhysicalComponent, InputComponent)
         for (const entity of entitys) {
-
-
-
             const timeOffset = dt
 
             const positionCom = entity.getCom(PositionComponent)
@@ -29,14 +27,14 @@ export class MovementSystem extends ecs.System {
             const velocityX = physicalCom.velocityX
             const velocityY = physicalCom.velocityY
 
-
             const { directionX, directionY } = this.getEntityDirection(entity)
 
+            // 一旦有朝向说明有移动，向服务器同步操作
             if (directionX != 0 || directionY != 0) {
-                console.log(position)
+                console.log(dt)
+                FramesManager.sendInputs({ playerMove: { dt: String(timeOffset), speed: { x: velocityX, y: velocityY }, playerId: 110 } })
+                // position.add(new Vec3(timeOffset * velocityX * 100 * directionX, timeOffset * velocityY * 100 * directionY, 0))
             }
-            position.add(new Vec3(timeOffset * velocityX * 100 * directionX, timeOffset * velocityY * 100 * directionY, 0))
-
 
         }
     }
@@ -46,6 +44,7 @@ export class MovementSystem extends ecs.System {
     * @param entity 实体实例
     */
     private getEntityDirection(entity: ecs.Entity): { directionX: number, directionY: number } {
+
         let directionX, directionY
         const inputCom = entity.getCom(InputComponent)
         const curPresingKeyCode = inputCom.keyPresingCode[inputCom.keyPresingCode.length - 1]
@@ -76,7 +75,6 @@ export class MovementSystem extends ecs.System {
                 directionY = 0
             }
         }
-
 
         return { directionX, directionY }
     }
