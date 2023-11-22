@@ -34,6 +34,9 @@ export class FramesManager {
         }
     }
 
+    /**
+    * 追朔帧数
+    */
     static syncFrams() {
         const frame = this.framseModel.pendingFrames.shift()
         const pendingFramesLen = this.framseModel.pendingFrames.length
@@ -50,11 +53,4 @@ export class FramesManager {
         const data: C2S_Frames = { playerMove: {} }
         this.sendInputs(data)
     }
-
-    static sendInputs(data: C2S_Frames) {
-        NetManager.sendData(protoName2Id.C2S_Frames, data)
-    }
-
-
-
 }

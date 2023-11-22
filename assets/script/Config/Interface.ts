@@ -3,8 +3,8 @@ import { ecs } from "../Core/ECS"
 
 
 
-
-export interface layerConfig {
+export interface LayerConfig {
     id: number
     layer: Node
 }
+

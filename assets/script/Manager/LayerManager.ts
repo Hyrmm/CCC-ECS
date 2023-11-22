@@ -1,6 +1,6 @@
 import { Node } from "cc"
 import { ecs } from '../Core/ECS'
-import { layerConfig } from "../Config/Interface"
+import { LayerConfig } from "../Config/Interface"
 import { LayerIdEnum } from "../Config/Enum"
 
 
@@ -23,7 +23,7 @@ export class LayerManager {
         }
     }
 
-    static setLayer(layerConfig: layerConfig) {
+    static setLayer(layerConfig: LayerConfig) {
         return this.layersPool.set(layerConfig.id, layerConfig.layer)
     }
 
