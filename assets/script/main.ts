@@ -15,6 +15,7 @@ import { LayerIdEnum } from "./Config/Enum"
 import { NetManager } from "./Manager/NetManager";
 import { ModelsManager } from "./Manager/ModelsManager";
 import { FramesManager } from "./Manager/FramesManager";
+import { SystemManager } from "./Manager/SystemManager";
 
 
 const { ccclass, property } = _decorator;
@@ -35,14 +36,15 @@ export class main extends Component {
 
     protected onLoad(): void {
         this.initAssetsManager(() => {
-            this.initSystem()
             this.initGameEvent()
             this.initLayerManager()
-            this.initInputListener()
             this.initEntityManager()
             this.initNetManager()
             this.initModelsManager()
             this.initFramesManager()
+            this.initSystemManager()
+            this.initInputListener()
+            this.initSystem()
         })
     }
 
@@ -52,12 +54,7 @@ export class main extends Component {
 
 
 
-    //** 系统初始化 */
-    private initSystem() {
-        this.renderSystem = this.rootSystem.add(new RenderSystem())
-        this.movementSystem = this.rootSystem.add(new MovementSystem())
-        this.inputListenerSystem = this.rootSystem.add(new InputListenerSystem())
-    }
+
 
     //** 输入监听初始化 */
     private initInputListener() {
@@ -71,6 +68,13 @@ export class main extends Component {
         game.on(Game.EVENT_SHOW, () => {
             NetManager.reConnect()
         })
+    }
+
+    //** 系统管理器初始化 */
+    private initSystemManager() {
+        this.renderSystem = SystemManager.registerSystem(RenderSystem)
+        this.movementSystem = SystemManager.registerSystem(MovementSystem)
+        this.inputListenerSystem = SystemManager.registerSystem(InputListenerSystem)
     }
 
     //** 层级管理器初始化 */
@@ -102,6 +106,13 @@ export class main extends Component {
     //** 帧同步管理器初始化 */
     private initFramesManager() {
         FramesManager.init()
+    }
+
+    //** 系统初始化 */
+    private initSystem() {
+        this.renderSystem = this.rootSystem.add(this.renderSystem)
+        this.movementSystem = this.rootSystem.add(this.movementSystem)
+        this.inputListenerSystem = this.rootSystem.add(this.inputListenerSystem)
     }
 }
 

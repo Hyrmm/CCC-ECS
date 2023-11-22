@@ -1,9 +1,9 @@
 import { ecs } from "../Core/ECS"
 import { PositionComponent } from "../Component/PositionComponent"
 import { RenderComponent } from "../Component/RenderComponent"
-import { InputComponent } from '../Component/InputComponent';
+import { BaseSystem } from "./System";
 
-export class RenderSystem extends ecs.System {
+export class RenderSystem extends BaseSystem {
 
     public priority: number = 1
     public managedECSComponents = []

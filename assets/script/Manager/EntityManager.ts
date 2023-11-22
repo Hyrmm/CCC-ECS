@@ -1,9 +1,9 @@
 import { Prefab, instantiate, log } from "cc"
 import { ecs } from "../Core/ECS"
 import { LayerManager } from "../Manager/LayerManager"
-import { BaseEntity, playerEntityConfig } from "../Config/Entity"
+import { BaseEntity, playerEntityConfig } from "../Entity/Entity"
 import { AssetsManager } from "./AssetsManager"
-import { I_EntityConfig } from "../Config/Entity"
+import { I_EntityConfig } from "../Entity/Entity"
 
 
 

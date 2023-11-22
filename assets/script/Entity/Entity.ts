@@ -1,5 +1,5 @@
 import { LayerIdEnum } from "../Config/Enum"
-import { InputComponent, PhysicalComponent, PositionComponent, RenderComponent } from "../Component/ECSComponent"
+import { InputComponent, PhysicalComponent, PlayerComponents, PositionComponent, RenderComponent } from "../Component/ECSComponent"
 import { ecs } from "../Core/ECS"
 
 
@@ -24,7 +24,7 @@ export interface I_EntityConfig {
 export const playerEntityConfig: I_EntityConfig = {
     name: "player",
     layerId: LayerIdEnum.playerLayer,
-    components: [PositionComponent, PhysicalComponent, InputComponent, RenderComponent],
+    components: [PositionComponent, PhysicalComponent, InputComponent, RenderComponent, PlayerComponents],
     velocity: [2, 2],
     moveClipsName: "captain",
     prefebName: "player"

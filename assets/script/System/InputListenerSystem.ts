@@ -1,10 +1,11 @@
 import { ecs } from "../Core/ECS"
 import { EventKeyboard, KeyCode } from "cc"
 import { InputComponent } from "../Component/ECSComponent"
+import { BaseSystem } from "./System"
 
 
 
-export class InputListenerSystem extends ecs.System {
+export class InputListenerSystem extends BaseSystem {
 
     public priority: number = 1
     private keyPresingCode: Array<KeyCode> = []

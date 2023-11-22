@@ -1,6 +1,6 @@
 import { ecs } from "../Core/ECS"
 import { _decorator } from 'cc'
-import { BaseComponent } from "../Config/Component"
+import { BaseComponent } from "./Component"
 const { ccclass, property } = _decorator
 
 
