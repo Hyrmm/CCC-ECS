@@ -4,6 +4,7 @@ import { LayerManager } from "../Manager/LayerManager"
 import { BaseEntity, playerEntityConfig } from "../Entity/Entity"
 import { AssetsManager } from "./AssetsManager"
 import { I_EntityConfig } from "../Entity/Entity"
+import { PhysicalComponent } from "../Component/PhysicalComponent"
 
 
 
@@ -40,10 +41,13 @@ export class EntityManager {
         return entity
     }
 
-    // 挂载配置
+    // 挂载数据
     static setConfig(entityConfig: I_EntityConfig, entity: BaseEntity) {
+        // 速度
         if (entityConfig.velocity) {
-            
+            const physicalCom = entity.getComponent(PhysicalComponent)
+            physicalCom.velocityX = entityConfig.velocity[0]
+            physicalCom.velocityY = entityConfig.velocity[1]
         }
     }
 

@@ -2,6 +2,7 @@ import { Node } from "cc"
 import { ecs } from '../Core/ECS'
 import { I_LayerConfig } from "../Config/Interface"
 import { LayerIdEnum } from "../Config/Enum"
+import { BaseEntity } from "../Entity/Entity"
 
 
 
@@ -31,7 +32,7 @@ export class LayerManager {
         return this.layersPool.get(layerId)
     }
 
-    static setEntity2Layer(layerId: number, entity: ecs.Entity) {
+    static setEntity2Layer(layerId: number, entity: BaseEntity) {
         const targetLayer = this.layersPool.get(layerId)
 
         if (targetLayer) {

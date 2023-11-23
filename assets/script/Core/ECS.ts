@@ -6,7 +6,7 @@ import { Component, Node } from "cc"
 
 export module ecs {
     type comName = string
-    type name2ECSComponent<T> = Map<string, T>
+    type name2ECSComponent<T> = Map<string, ctor<T>>
 
     type systemPool = Array<System>
     type entityPool = Array<Entity>
@@ -130,19 +130,30 @@ export module ecs {
     export class ECSDecorator {
         static registerECSComName(name: string) {
             return function <T extends { new(...args: any[]): {} }>(constructor: T) {
-                return class extends constructor {
+                const cls = class extends constructor {
                     static comName = name;
-                };
+                }
+                // ecs.comName2EntityPool.set(name, cls)
+                return cls
             };
         }
     }
 
     export class ECSQuery {
-        static withCom(comCtor: ctor<ICom>): Array<Entity> {
+
+        /**
+         * 持有某个组件
+         * @param comCtors 组件类
+        */
+        static withCom(comCtor: ctor<ECSComponent>): Array<Entity> {
             return comName2EntityPool.get(comCtor['comName'])
         }
 
-        static withComs(...comCtors: ctor<ICom>[]): Array<Entity> {
+        /**
+         * 持有某些组件
+         * @param comCtors 组件类
+        */
+        static withComs(...comCtors: ctor<ECSComponent>[]): Array<Entity> {
             let resultEntitys = []
 
             comCtors.forEach(
@@ -153,7 +164,12 @@ export module ecs {
 
             return resultEntitys
         }
-        static withComsBoth(...comCtors: ctor<ICom>[]): Array<Entity> {
+
+        /**
+         * 同时持有某些组件
+         * @param comCtors 组件类
+        */
+        static withComsBoth(...comCtors: ctor<ECSComponent>[]): Array<Entity> {
             let resultEntitys = []
 
             const checkCount = comCtors.length
@@ -177,12 +193,13 @@ export module ecs {
             return resultEntitys
         }
 
-        static withComsButWithoutCom(comCtors: Array<ctor<ICom>>, withoutCom: ctor<ICom>) {
-
+        /**
+         * 持有某些组件但不包含某个组件
+         * @param comCtors 组件类
+        */
+        static withComsButWithoutCom(comCtors: Array<ctor<ECSComponent>>, withoutCom: ctor<ECSComponent>) {
             const withComs = this.withComs(...comCtors)
             const resultEntitys = withComs.filter((entity) => entity.hasCom(withoutCom))
-
-
             return resultEntitys
         }
 

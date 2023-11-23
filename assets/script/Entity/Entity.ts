@@ -25,7 +25,7 @@ export const playerEntityConfig: I_EntityConfig = {
     name: "player",
     layerId: LayerIdEnum.playerLayer,
     components: [PositionComponent, PhysicalComponent, InputComponent, RenderComponent, PlayerComponents],
-    velocity: [2, 2],
+    velocity: [1, 1],
     moveClipsName: "captain",
     prefebName: "player"
 }

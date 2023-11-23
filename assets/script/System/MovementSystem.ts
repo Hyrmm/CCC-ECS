@@ -57,7 +57,10 @@ export class MovementSystem extends BaseSystem {
             const playerCom = entity.getComponent(PlayerComponents)
             const positionCom = entity.getCom(PositionComponent)
             const playerMoveData = playerId2PlayerMoveMap.get(playerCom.playerId)
-            positionCom.position.add(new Vec3(playerMoveData.dt * playerMoveData.velocityX, playerMoveData.dt * playerMoveData.velocityY, 0))
+
+            const posX = playerMoveData.dt * playerMoveData.velocityX
+            const posY = playerMoveData.dt * playerMoveData.velocityY
+            positionCom.position.add(new Vec3(posX / 2, posY / 2, 0))
         }
 
 

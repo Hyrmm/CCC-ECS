@@ -3,6 +3,7 @@ import { I_InputsType, I_OutputsType } from "../Config/Interface"
 import { FramesModel } from "../Models/FramesModel"
 import { C2S_Frames, S2C_Frames } from "../Proto/pb"
 import { MovementSystem } from "../System/MovementSystem"
+import { RootSystem } from "../System/RootSystem"
 import { ModelsManager } from "./ModelsManager"
 import { SystemManager } from "./SystemManager"
 
@@ -10,13 +11,18 @@ export class FramesManager {
 
     static pendingFrames: Array<S2C_Frames>
     static pendingInputs: Array<any>
+
+    static rootSystem: RootSystem
     static framesModel: FramesModel
-    static asyncInterval: number
+
+
     static asyncTimer: number = 100
+    static framesScheduleId: Symbol
 
     static init() {
+        this.rootSystem = SystemManager.getSystem(RootSystem)
         this.framesModel = ModelsManager.getModel(FramesModel)
-        this.asyncInterval = setInterval(this.syncFrames.bind(this), this.asyncTimer)
+        this.framesScheduleId = this.rootSystem.addFramesSchedule(this.syncFrames, this)
     }
 
     /**
@@ -25,17 +31,19 @@ export class FramesManager {
     static syncFrames() {
         const frame = this.framesModel.pendingFrames.shift()
         const pendingFramesLen = this.framesModel.pendingFrames.length
-        console.log(`当前执行帧:`, frame, "剩余等待帧数量:", pendingFramesLen)
+
+        if (!frame) return
 
         // 同步等待帧帧堆积
         if (pendingFramesLen > 0) {
-            clearInterval(this.asyncInterval)
-            this.asyncInterval = setInterval(this.keepFrames.bind(this), this.asyncTimer / 10)
+            this.rootSystem.delFramesSchedule(this.framesScheduleId)
+            this.framesScheduleId = this.rootSystem.addFramesSchedule(this.keepFrames, this)
         }
 
         if (frame.playerMove) {
             this.parseOnputs(OutputsTypeEnum.PlayerMove, { playerMove: frame.playerMove })
         }
+        console.log(`当前执行帧:`, frame, "剩余等待帧数量:", pendingFramesLen)
     }
 
     /**
@@ -48,9 +56,8 @@ export class FramesManager {
 
         // 同步完成修正状态
         if (pendingFramesLen <= 0) {
-            clearInterval(this.asyncInterval)
-            this.asyncInterval = setInterval(this.syncFrames.bind(this), this.asyncTimer)
-            this.applyInputs(InputsTypeEnum.PlayerMove, { playerMove: { dt: 100, velocityX: 1, velocityY: 2 } })
+            this.rootSystem.delFramesSchedule(this.framesScheduleId)
+            this.framesScheduleId = this.rootSystem.addFramesSchedule(this.syncFrames, this)
         }
     }
 

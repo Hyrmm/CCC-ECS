@@ -28,7 +28,7 @@ export class main extends Component {
 
 
 
-    private rootSystem: RootSystem = new RootSystem()
+    private rootSystem: RootSystem | null
     private renderSystem: RenderSystem | null
     private movementSystem: MovementSystem | null
     private inputListenerSystem: InputListenerSystem | null
@@ -36,45 +36,52 @@ export class main extends Component {
 
     protected onLoad(): void {
         this.initAssetsManager(() => {
-            this.initGameEvent()
-            this.initLayerManager()
-            this.initEntityManager()
+            this.initSystemManager()
+            this.initRootSystem()
             this.initNetManager()
             this.initModelsManager()
             this.initFramesManager()
-            this.initSystemManager()
+            this.initLayerManager()
+            this.initEntityManager()
+            this.initGameEvent()
             this.initInputListener()
-            this.initSystem()
         })
     }
 
     update(deltaTime: number) {
-        this.rootSystem.execute(deltaTime)
+        if (this.rootSystem) {
+            this.rootSystem.execute(deltaTime)
+        }
     }
 
-
-
-
-
-    //** 输入监听初始化 */
-    private initInputListener() {
-        input.on(Input.EventType.KEY_UP, this.inputListenerSystem.onKeyUp, this.inputListenerSystem);
-        input.on(Input.EventType.KEY_DOWN, this.inputListenerSystem.onKeyDown, this.inputListenerSystem);
-        input.on(Input.EventType.KEY_PRESSING, this.inputListenerSystem.onKeyPressing, this.inputListenerSystem);
-    }
-
-    //** 游戏事件监听初始化 */
-    private initGameEvent() {
-        game.on(Game.EVENT_SHOW, () => {
-            NetManager.reConnect()
-        })
+    //** 资源管理器初始化 */
+    private initAssetsManager(finishCb) {
+        AssetsManager.init(finishCb)
     }
 
     //** 系统管理器初始化 */
     private initSystemManager() {
+        this.rootSystem = SystemManager.registerSystem(RootSystem)
         this.renderSystem = SystemManager.registerSystem(RenderSystem)
         this.movementSystem = SystemManager.registerSystem(MovementSystem)
         this.inputListenerSystem = SystemManager.registerSystem(InputListenerSystem)
+    }
+
+    //** 根系统初始化 */
+    private initRootSystem() {
+        this.rootSystem.add(this.renderSystem)
+        this.rootSystem.add(this.movementSystem)
+        this.rootSystem.add(this.inputListenerSystem)
+    }
+
+    //** 网络管理器初始化 */
+    private initNetManager() {
+        NetManager.init()
+    }
+
+    //** 模型层管理器初始化 */
+    private initModelsManager() {
+        ModelsManager.init()
     }
 
     //** 层级管理器初始化 */
@@ -88,31 +95,23 @@ export class main extends Component {
         EntityManager.init()
     }
 
-    //** 资源管理器初始化 */
-    private initAssetsManager(finishCb) {
-        AssetsManager.init(finishCb)
-    }
-
-    //** 网络管理器初始化 */
-    private initNetManager() {
-        NetManager.init()
-    }
-
-    //** 模型层管理器初始化 */
-    private initModelsManager() {
-        ModelsManager.init()
-    }
-
     //** 帧同步管理器初始化 */
     private initFramesManager() {
         FramesManager.init()
     }
 
-    //** 系统初始化 */
-    private initSystem() {
-        this.renderSystem = this.rootSystem.add(this.renderSystem)
-        this.movementSystem = this.rootSystem.add(this.movementSystem)
-        this.inputListenerSystem = this.rootSystem.add(this.inputListenerSystem)
+    //** 输入监听初始化 */
+    private initInputListener() {
+        input.on(Input.EventType.KEY_UP, this.inputListenerSystem.onKeyUp, this.inputListenerSystem);
+        input.on(Input.EventType.KEY_DOWN, this.inputListenerSystem.onKeyDown, this.inputListenerSystem);
+        input.on(Input.EventType.KEY_PRESSING, this.inputListenerSystem.onKeyPressing, this.inputListenerSystem);
+    }
+
+    //** 游戏事件监听初始化 */
+    private initGameEvent() {
+        game.on(Game.EVENT_SHOW, () => {
+            NetManager.reConnect()
+        })
     }
 }
 
