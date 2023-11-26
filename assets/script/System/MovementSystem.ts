@@ -60,7 +60,7 @@ export class MovementSystem extends BaseSystem {
 
             const posX = playerMoveData.dt * playerMoveData.velocityX
             const posY = playerMoveData.dt * playerMoveData.velocityY
-            positionCom.position.add(new Vec3(posX / 2, posY / 2, 0))
+            positionCom.position.add(new Vec3(posX / 5, posY / 5, 0))
         }
 
 

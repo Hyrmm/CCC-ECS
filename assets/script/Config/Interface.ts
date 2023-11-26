@@ -8,11 +8,11 @@ export interface I_LayerConfig {
     layer: Node
 }
 
-export interface I_InputsType {
+export interface I_InputsTypeLocal {
     playerMove?: T_PlayerMove
 }
 
-export interface I_OutputsType {
+export interface I_InputsTypeServe {
     playerMove?: Array<T_PlayerMove>
 }
 

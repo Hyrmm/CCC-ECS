@@ -69,9 +69,9 @@ export class main extends Component {
 
     //** 根系统初始化 */
     private initRootSystem() {
-        this.rootSystem.add(this.renderSystem)
-        this.rootSystem.add(this.movementSystem)
-        this.rootSystem.add(this.inputListenerSystem)
+        this.rootSystem.addSystem(this.renderSystem)
+        this.rootSystem.addSystem(this.movementSystem)
+        this.rootSystem.addSystem(this.inputListenerSystem)
     }
 
     //** 网络管理器初始化 */

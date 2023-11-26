@@ -1,7 +1,7 @@
 import { Prefab, instantiate, log } from "cc"
 import { ecs } from "../Core/ECS"
 import { LayerManager } from "../Manager/LayerManager"
-import { BaseEntity, playerEntityConfig } from "../Entity/Entity"
+import { BaseEntity } from "../Entity/Entity"
 import { AssetsManager } from "./AssetsManager"
 import { I_EntityConfig } from "../Entity/Entity"
 import { PhysicalComponent } from "../Component/PhysicalComponent"
@@ -15,7 +15,6 @@ export class EntityManager {
 
     static init() {
         this.entitysPool = ecs.entityPool
-        this.createEntity(playerEntityConfig)
     }
 
 

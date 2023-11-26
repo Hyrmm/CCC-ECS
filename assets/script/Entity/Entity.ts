@@ -21,13 +21,25 @@ export interface I_EntityConfig {
     velocity?: [number, number]
 }
 
-export const playerEntityConfig: I_EntityConfig = {
-    name: "player",
-    layerId: LayerIdEnum.playerLayer,
-    components: [PositionComponent, PhysicalComponent, InputComponent, RenderComponent, PlayerComponents],
-    velocity: [1, 1],
-    moveClipsName: "captain",
-    prefebName: "player"
+
+export const entityConfig: { [key: string]: I_EntityConfig } = {
+    selfPlayerEntityConfig: {
+        name: "player",
+        layerId: LayerIdEnum.playerLayer,
+        components: [PositionComponent, PhysicalComponent, InputComponent, RenderComponent, PlayerComponents],
+        velocity: [1, 1],
+        moveClipsName: "captain",
+        prefebName: "player"
+    },
+    otherPlayerEntityConfig: {
+        name: "player",
+        layerId: LayerIdEnum.playerLayer,
+        components: [PositionComponent, PhysicalComponent, RenderComponent, PlayerComponents],
+        velocity: [1, 1],
+        moveClipsName: "captain",
+        prefebName: "player"
+    }
+
 }
 
 

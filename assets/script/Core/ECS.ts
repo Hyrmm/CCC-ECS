@@ -13,10 +13,6 @@ export module ecs {
 
     type ctor<T = unknown> = new (...args: any[]) => T;
 
-    interface ICom {
-        entity: Entity
-    }
-
     window['ecs'] = ecs
 
     export const systemPool: systemPool = []
@@ -116,13 +112,13 @@ export module ecs {
          * 实体上是否有该组件
          * @param comCls 组件类
         */
-        public hasCom(comCls: ctor<ICom>): boolean {
+        public hasCom(comCls: ctor<Component>): boolean {
             return this.name2ECSComponent.has(comCls['comName'])
         }
 
     }
 
-    export class ECSComponent extends Component implements ICom {
+    export class ECSComponent extends Component {
         static comName: string = ""
         public entity: Entity
     }
@@ -146,7 +142,7 @@ export module ecs {
          * @param comCtors 组件类
         */
         static withCom(comCtor: ctor<ECSComponent>): Array<Entity> {
-            return comName2EntityPool.get(comCtor['comName'])
+            return comName2EntityPool.get(comCtor['comName']) || []
         }
 
         /**
@@ -202,8 +198,6 @@ export module ecs {
             const resultEntitys = withComs.filter((entity) => entity.hasCom(withoutCom))
             return resultEntitys
         }
-
-
     }
 
 

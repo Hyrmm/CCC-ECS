@@ -33,7 +33,7 @@ export class NetManager {
     }
 
     static doConnect() {
-        this.webSocket = new WebSocket("ws://127.0.0.1:8888")
+        this.webSocket = new WebSocket("ws://192.168.0.104:8888")
         this.webSocket.binaryType = "arraybuffer"
         const self = this
         this.webSocket.onopen = (ev) => {
@@ -72,13 +72,15 @@ export class NetManager {
             this.recvHeartbeat(bodyData as pb.C2S_HeartBeat)
         }
 
-        // 分发协议消息
-        EventManager.emit(protoName, bodyData)
+
 
         const dirtyProtoList = [protoName2Id[EnumProtoName.S2C_Frames]]
         if (!dirtyProtoList.includes(protoId)) {
             console.log("%c↓", "color:red;", `[recvData]:${protoId}|${protoName}:`, bodyData)
         }
+
+        // 分发协议消息
+        EventManager.emit(protoName, bodyData)
 
     }
 

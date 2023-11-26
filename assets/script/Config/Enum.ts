@@ -12,8 +12,8 @@ export enum KeyCodeEnum {
 }
 
 //** 消息 */
-export enum MsgEnum {
-    SyncFrames = 1
+export enum EnumLocalMsg {
+    LoginSucess = "LoginSucess"
 }
 
 //** 帧同步输入名类型 */
@@ -21,9 +21,5 @@ export enum InputsTypeEnum {
     PlayerMove = "playerMove"
 }
 
-//** 帧同步输入名类型 */
-export enum OutputsTypeEnum {
-    PlayerMove = "playerMove"
-}
 
 

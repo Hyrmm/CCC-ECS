@@ -1,7 +1,7 @@
-import { InputsTypeEnum, OutputsTypeEnum } from "../Config/Enum"
-import { I_InputsType, I_OutputsType } from "../Config/Interface"
+import { InputsTypeEnum } from "../Config/Enum"
+import { I_InputsTypeLocal, I_InputsTypeServe } from "../Config/Interface"
 import { FramesModel } from "../Models/FramesModel"
-import { C2S_Frames, S2C_Frames } from "../Proto/pb"
+import { S2C_Frames } from "../Proto/pb"
 import { MovementSystem } from "../System/MovementSystem"
 import { RootSystem } from "../System/RootSystem"
 import { ModelsManager } from "./ModelsManager"
@@ -9,24 +9,25 @@ import { SystemManager } from "./SystemManager"
 
 export class FramesManager {
 
-    static pendingFrames: Array<S2C_Frames>
     static pendingInputs: Array<any>
+    static pendingFrames: Array<S2C_Frames>
 
-    static rootSystem: RootSystem
+
     static framesModel: FramesModel
 
-
-    static asyncTimer: number = 100
-    static framesScheduleId: Symbol
+    static asyncSchedule: Symbol
 
     static init() {
-        this.rootSystem = SystemManager.getSystem(RootSystem)
         this.framesModel = ModelsManager.getModel(FramesModel)
-        this.framesScheduleId = this.rootSystem.addFramesSchedule(this.syncFrames, this)
+    }
+
+    static startSyncFrames() {
+        const rootSystem = SystemManager.getSystem(RootSystem)
+        this.asyncSchedule = rootSystem.addFramesSchedule(this.syncFrames, this)
     }
 
     /**
-    * 同步帧数
+    * 同步帧
     */
     static syncFrames() {
         const frame = this.framesModel.pendingFrames.shift()
@@ -36,18 +37,16 @@ export class FramesManager {
 
         // 同步等待帧帧堆积
         if (pendingFramesLen > 0) {
-            this.rootSystem.delFramesSchedule(this.framesScheduleId)
-            this.framesScheduleId = this.rootSystem.addFramesSchedule(this.keepFrames, this)
+            const rootSystem = SystemManager.getSystem(RootSystem)
+            rootSystem.delFramesSchedule(this.asyncSchedule)
+            this.asyncSchedule = rootSystem.addFramesSchedule(this.keepFrames, this)
         }
 
-        if (frame.playerMove) {
-            this.parseOnputs(OutputsTypeEnum.PlayerMove, { playerMove: frame.playerMove })
-        }
-        console.log(`当前执行帧:`, frame, "剩余等待帧数量:", pendingFramesLen)
+        this.preParseInputs(frame)
     }
 
     /**
-    * 追朔帧数
+    * 追朔帧
     */
     static keepFrames() {
         const frame = this.framesModel.pendingFrames.shift()
@@ -56,9 +55,12 @@ export class FramesManager {
 
         // 同步完成修正状态
         if (pendingFramesLen <= 0) {
-            this.rootSystem.delFramesSchedule(this.framesScheduleId)
-            this.framesScheduleId = this.rootSystem.addFramesSchedule(this.syncFrames, this)
+            const rootSystem = SystemManager.getSystem(RootSystem)
+            rootSystem.delFramesSchedule(this.asyncSchedule)
+            this.asyncSchedule = rootSystem.addFramesSchedule(this.syncFrames, this)
         }
+
+        this.preParseInputs(frame)
     }
 
     /**
@@ -66,11 +68,11 @@ export class FramesManager {
     * @param inputsType 输入类型名称
     * @param inputs 对应类型数据
     */
-    static applyInputs(inputsType: InputsTypeEnum, inputs: I_InputsType) {
+    static applyInputs(inputsType: InputsTypeEnum, inputs: I_InputsTypeLocal) {
         switch (inputsType) {
             // 移动
             case InputsTypeEnum.PlayerMove: {
-                this.framesModel.sendPlayerMoveInputs(inputs.playerMove)
+                this.framesModel.applyPlayerMoveInputs(inputs.playerMove)
                 break
             }
 
@@ -81,14 +83,24 @@ export class FramesManager {
     }
 
     /**
+    * 預解析来自服务输入
+    * @param frame 幀消息
+    */
+    static preParseInputs(frame: S2C_Frames) {
+        if (frame.playerMove) {
+            this.parseInputs(InputsTypeEnum.PlayerMove, { playerMove: frame.playerMove })
+        }
+    }
+
+    /**
     * 解析来自服务输入
     * @param inputsType 输入类型名称
     * @param inputs 对应类型数据
     */
-    static parseOnputs(inputsType: OutputsTypeEnum, inputs: I_OutputsType) {
+    static parseInputs(inputsType: InputsTypeEnum, inputs: I_InputsTypeServe) {
         switch (inputsType) {
             // 移动
-            case OutputsTypeEnum.PlayerMove: {
+            case InputsTypeEnum.PlayerMove: {
                 const movementSystem = SystemManager.getSystem(MovementSystem)
                 movementSystem.updatePlayerPositon(inputs.playerMove)
                 break

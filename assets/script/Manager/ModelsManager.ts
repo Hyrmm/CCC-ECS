@@ -45,6 +45,7 @@ export class ModelsManager {
 
     static registerModels(): void {
         this.modelMap.addInstance(FramesModel.name, new FramesModel)
+        this.modelMap.addInstance(UserInfoModel.name, new UserInfoModel)
     }
 
     static registerModelsListener(): void {

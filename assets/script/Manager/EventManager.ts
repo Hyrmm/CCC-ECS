@@ -3,15 +3,15 @@ export class EventManager {
     /**
      * 普通事件容器
      */
-    private static events: Map<string, Subscription[]> = new Map<string, Subscription[]>();
+    private static events: Map<string, Subscription[]> = new Map()
 
     /**
      * 一次性事件容器
      */
-    private static onceEvents: Map<string, Subscription[]> = new Map<string, Subscription[]>();
+    private static onceEvents: Map<string, Subscription[]> = new Map()
 
     public static init() {
-        
+
     }
 
 
@@ -22,12 +22,12 @@ export class EventManager {
      * @param target 目标
      */
     public static on(name: string, callback: Function, target?: any) {
-        const events = this.events;
+        const events = this.events
         if (!events.has(name)) {
-            events.set(name, [{ callback, target }]);
-            return;
+            events.set(name, [{ callback, target }])
+            return
         }
-        events.get(name).push({ callback, target });
+        events.get(name).push({ callback, target })
     }
 
     /**
@@ -37,12 +37,12 @@ export class EventManager {
      * @param target 目标
      */
     public static once(name: string, callback: Function, target?: any) {
-        const events = this.onceEvents;
+        const events = this.onceEvents
         if (!events.has(name)) {
-            events.set(name, [{ callback, target }]);
-            return;
+            events.set(name, [{ callback, target }])
+            return
         }
-        events.get(name).push({ callback, target });
+        events.get(name).push({ callback, target })
     }
 
     /**
@@ -53,15 +53,15 @@ export class EventManager {
      */
     public static off(name: string, callback: Function, target?: any) {
         // 普通事件
-        const event = this.events.get(name);
+        const event = this.events.get(name)
         if (event) {
             for (let i = 0, l = event.length; i < l; i++) {
                 if (this.compare(event[i], callback, target)) {
                     event.splice(i, 1);
                     if (event.length === 0) {
-                        this.events.delete(name);
+                        this.events.delete(name)
                     }
-                    break;
+                    break
                 }
             }
         }
@@ -70,11 +70,11 @@ export class EventManager {
         if (onceEvent) {
             for (let i = 0, l = onceEvent.length; i < l; i++) {
                 if (this.compare(onceEvent[i], callback, target)) {
-                    onceEvent.splice(i, 1);
+                    onceEvent.splice(i, 1)
                     if (onceEvent.length === 0) {
-                        this.onceEvents.delete(name);
+                        this.onceEvents.delete(name)
                     }
-                    break;
+                    break
                 }
             }
         }
@@ -87,21 +87,21 @@ export class EventManager {
      */
     public static emit(name: string, ...args: any[]) {
         // 普通事件
-        const event = this.events.get(name);
+        const event = this.events.get(name)
         if (event) {
             for (let i = 0; i < event.length; i++) {
-                const { callback, target } = event[i];
-                callback.apply(target, args);
+                const { callback, target } = event[i]
+                callback.apply(target, args)
             }
         }
         // 一次性事件
         const onceEvent = this.onceEvents.get(name);
         if (onceEvent) {
             for (let i = 0; i < onceEvent.length; i++) {
-                const { callback, target } = onceEvent[i];
-                callback.apply(target, args);
+                const { callback, target } = onceEvent[i]
+                callback.apply(target, args)
             }
-            this.onceEvents.delete(name);
+            this.onceEvents.delete(name)
         }
     }
 
@@ -112,11 +112,11 @@ export class EventManager {
     public static remove(name: string) {
         // 普通事件
         if (this.events.has(name)) {
-            this.events.delete(name);
+            this.events.delete(name)
         }
         // 一次性事件
         if (this.onceEvents.has(name)) {
-            this.onceEvents.delete(name);
+            this.onceEvents.delete(name)
         }
     }
 
@@ -125,9 +125,9 @@ export class EventManager {
      */
     public static removeAll() {
         // 普通事件
-        this.events.clear();
+        this.events.clear()
         // 一次性事件
-        this.onceEvents.clear();
+        this.onceEvents.clear()
     }
 
     /**
@@ -137,7 +137,7 @@ export class EventManager {
      * @param inTarget 目标
      */
     private static compare(subscription: Subscription, inCallback: Function, inTarget: any) {
-        const { callback, target } = subscription;
+        const { callback, target } = subscription
         return target === inTarget && (callback === inCallback || callback.toString() === inCallback.toString());
     }
 
@@ -146,7 +146,7 @@ export class EventManager {
 /** 订阅 */
 interface Subscription {
     /** 回调 */
-    callback: Function;
+    callback: Function
     /** 目标 */
-    target: any;
+    target: any
 }
