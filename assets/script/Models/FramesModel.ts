@@ -1,13 +1,12 @@
 import { BaseModel } from "./BaseModel";
 import { EnumProtoId, EnumProtoName, protoName2Id } from "../Proto/protoMap";
-import * as pb from "../Proto/pb";
-import { T_PlayerMove } from "../Config/Interface";
 import { ModelsManager } from "../Manager/ModelsManager";
 import { UserInfoModel } from "./UserInfoModel";
 import { EntityManager } from "../Manager/EntityManager";
 import { entityConfig } from "../Entity/Entity";
-import { EnumLocalMsg } from "../Config/Enum";
 import { FramesManager } from "../Manager/FramesManager";
+import * as pb from "../Proto/pb";
+import { GEnum, GType } from "../Config/Enum";
 
 export class FramesModel extends BaseModel {
     private playerId: number = 10086
@@ -19,7 +18,7 @@ export class FramesModel extends BaseModel {
         this.regeisterListener(EnumProtoName.S2C_SyncRoomStatus, this.parseSyncRoomStatus, this)
 
 
-        this.regeisterListenerLocal(EnumLocalMsg.LoginSucess, this.handleLoginSucess, this)
+        this.regeisterListenerLocal(GEnum.LocalMsg.LoginSucess, this.handleLoginSucess, this)
     }
 
 
@@ -32,7 +31,7 @@ export class FramesModel extends BaseModel {
         this.sendMsg(EnumProtoId.C2S_PlayerJoin, data)
     }
 
-    public applyPlayerMoveInputs(sendData: T_PlayerMove) {
+    public applyPlayerMoveInputs(sendData: GType.PlayerMove) {
         const data: pb.C2S_Frames = { playerMove: { playerId: this.playerId, dt: sendData.dt, velocityX: sendData.velocityX, velocityY: sendData.velocityY } }
         this.applyFrame(data)
     }

@@ -1,7 +1,6 @@
-import { error } from "cc"
-import * as pb from "../Proto/pb"
 import { protoId2Name, protoName2Id, EnumProtoName } from "../Proto/protoMap"
 import { EventManager } from "./EventManager"
+import * as pb from "../Proto/pb"
 export class NetManager {
     static webSocket: WebSocket
 

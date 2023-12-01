@@ -1,8 +1,6 @@
 import { Node } from "cc"
-import { ecs } from '../Core/ECS'
-import { I_LayerConfig } from "../Config/Interface"
-import { LayerIdEnum } from "../Config/Enum"
 import { BaseEntity } from "../Entity/Entity"
+import { GEnum, GInterface } from "../Config/Enum"
 
 
 
@@ -15,7 +13,7 @@ export class LayerManager {
 
     static init(layerList: Array<{ id: number, layer: Node }>): void {
         this.initSetLayer(layerList)
-        this.playerLayer = this.layersPool.get(LayerIdEnum.playerLayer)
+        this.playerLayer = this.layersPool.get(GEnum.LayerId.playerLayer)
     }
 
     static initSetLayer(layerList: Array<{ id: number, layer: Node }>): void {
@@ -24,7 +22,7 @@ export class LayerManager {
         }
     }
 
-    static setLayer(layerConfig: I_LayerConfig) {
+    static setLayer(layerConfig: GInterface.LayerConfig) {
         return this.layersPool.set(layerConfig.id, layerConfig.layer)
     }
 

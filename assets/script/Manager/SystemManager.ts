@@ -14,7 +14,6 @@ class SystemMap {
         this.map.set(key, instance)
         this.array.push(instance)
     }
-
     /**
     * 获取实例
     * @param key model名

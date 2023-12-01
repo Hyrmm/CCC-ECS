@@ -7,11 +7,6 @@ export class BaseEntity extends ecs.Entity {
     public config: I_EntityConfig
 }
 
-
-
-
-
-
 export interface I_EntityConfig {
     name: string
     layerId: number

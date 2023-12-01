@@ -3,7 +3,7 @@ import { Component, Node } from "cc"
 
 
 
-
+FFF.EnumLocalMsg.LoginSucess
 export module ecs {
     type comName = string
     type name2ECSComponent<T> = Map<string, ctor<T>>
@@ -73,7 +73,7 @@ export module ecs {
          * 向实体添加组件
          * @param comCls 组件类
         */
-        public addComs<T extends ECSComponent>(comCls: Array<ctor<T>>): void {
+        public addComs<T extends ECSComponent>(comCls: Array< ctor<T> >): void {
             for (const componentCtor of comCls) {
                 this.addCom(componentCtor)
             }

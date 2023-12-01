@@ -1,5 +1,4 @@
-import { InputsTypeEnum } from "../Config/Enum"
-import { I_InputsTypeLocal, I_InputsTypeServe } from "../Config/Interface"
+import { GEnum, GInterface } from "../Config/Enum"
 import { FramesModel } from "../Models/FramesModel"
 import { S2C_Frames } from "../Proto/pb"
 import { MovementSystem } from "../System/MovementSystem"
@@ -68,10 +67,10 @@ export class FramesManager {
     * @param inputsType 输入类型名称
     * @param inputs 对应类型数据
     */
-    static applyInputs(inputsType: InputsTypeEnum, inputs: I_InputsTypeLocal) {
+    static applyInputs(inputsType: GEnum.InputsType, inputs: GInterface.InputsTypeLocal) {
         switch (inputsType) {
             // 移动
-            case InputsTypeEnum.PlayerMove: {
+            case GEnum.InputsType.PlayerMove: {
                 this.framesModel.applyPlayerMoveInputs(inputs.playerMove)
                 break
             }
@@ -88,7 +87,7 @@ export class FramesManager {
     */
     static preParseInputs(frame: S2C_Frames) {
         if (frame.playerMove) {
-            this.parseInputs(InputsTypeEnum.PlayerMove, { playerMove: frame.playerMove })
+            this.parseInputs(GEnum.InputsType.PlayerMove, { playerMove: frame.playerMove })
         }
     }
 
@@ -97,10 +96,10 @@ export class FramesManager {
     * @param inputsType 输入类型名称
     * @param inputs 对应类型数据
     */
-    static parseInputs(inputsType: InputsTypeEnum, inputs: I_InputsTypeServe) {
+    static parseInputs(inputsType: GEnum.InputsType, inputs: GInterface.InputsTypeServe) {
         switch (inputsType) {
             // 移动
-            case InputsTypeEnum.PlayerMove: {
+            case GEnum.InputsType.PlayerMove: {
                 const movementSystem = SystemManager.getSystem(MovementSystem)
                 movementSystem.updatePlayerPositon(inputs.playerMove)
                 break

@@ -1,4 +1,4 @@
-import { EnumLocalMsg } from "../Config/Enum"
+import { GEnum } from "../Config/Enum"
 import { EventManager } from "../Manager/EventManager"
 import { NetManager } from "../Manager/NetManager"
 import { EnumProtoName } from "../Proto/protoMap"
@@ -18,7 +18,7 @@ export class BaseModel {
         EventManager.on(msgName, callback, target ? target : this)
     }
 
-    protected regeisterListenerLocal<T extends BaseModel>(msgName: EnumLocalMsg, callback: (param) => void, target?: T) {
+    protected regeisterListenerLocal<T extends BaseModel>(msgName: GEnum.LocalMsg, callback: (param) => void, target?: T) {
         EventManager.on(msgName, callback, target ? target : this)
     }
 

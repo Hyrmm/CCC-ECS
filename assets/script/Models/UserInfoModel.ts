@@ -1,4 +1,4 @@
-import { EnumLocalMsg } from "../Config/Enum";
+import { GEnum } from "../Config/Enum";
 import { EventManager } from "../Manager/EventManager";
 import { S2C_Login } from "../Proto/pb";
 import { EnumProtoId, EnumProtoName } from "../Proto/protoMap";
@@ -21,7 +21,7 @@ export class UserInfoModel extends BaseModel {
 
     private parseLogin(recvData: S2C_Login): void {
         this.dataBase.userUuid = recvData.uuid
-        EventManager.emit(EnumLocalMsg.LoginSucess)
+        EventManager.emit(GEnum.LocalMsg.LoginSucess)
     }
 
 
