@@ -12,5 +12,6 @@ export class RenderComponent extends BaseComponent {
 
     update(deltaTime: number) {
 
+
     }
 }

@@ -3,7 +3,6 @@ import { Component, Node } from "cc"
 
 
 
-FFF.EnumLocalMsg.LoginSucess
 export module ecs {
     type comName = string
     type name2ECSComponent<T> = Map<string, ctor<T>>

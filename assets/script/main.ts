@@ -1,23 +1,20 @@
-import { ecs } from "./Core/ECS"
 import { _decorator, Component, Node, Input, input, game, Game, Enum } from 'cc';
-import { RootSystem } from './System/RootSystem';
-import { RenderSystem } from './System/RenderSystem';
-import { MovementSystem } from "./System/MovementSystem";
+import { RootSystem } from './System/RootSystem'
+import { RenderSystem } from './System/RenderSystem'
+import { MovementSystem } from "./System/MovementSystem"
 import { InputListenerSystem } from "./System/InputListenerSystem"
 import { LayerManager } from "./Manager/LayerManager"
 import { EntityManager } from "./Manager/EntityManager"
-import { AssetsManager } from "./Manager/AssetsManager";
+import { AssetsManager } from "./Manager/AssetsManager"
 
 
+import { NetManager } from "./Manager/NetManager"
+import { ModelsManager } from "./Manager/ModelsManager"
+import { FramesManager } from "./Manager/FramesManager"
+import { SystemManager } from "./Manager/SystemManager"
+import { GEnum } from "./Config/Enum"
 
-
-import { NetManager } from "./Manager/NetManager";
-import { ModelsManager } from "./Manager/ModelsManager";
-import { FramesManager } from "./Manager/FramesManager";
-import { SystemManager } from "./Manager/SystemManager";
-import { GEnum } from "./Config/Enum";
-
-
+import { GlobalEnum } from "./Type/Index"
 const { ccclass, property } = _decorator;
 
 @ccclass('main')

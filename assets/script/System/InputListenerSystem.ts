@@ -11,7 +11,6 @@ export class InputListenerSystem extends BaseSystem {
     private keyPresingCode: Array<KeyCode> = []
 
 
-
     public onKeyUp(even: EventKeyboard) {
         this.updateKeyCode('up', even.keyCode)
     }
