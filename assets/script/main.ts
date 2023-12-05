@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Input, input, game, Game, Enum } from 'cc';
+import { _decorator, Component, Node, Input, input, game, Game } from 'cc'
 import { RootSystem } from './System/RootSystem'
 import { RenderSystem } from './System/RenderSystem'
 import { MovementSystem } from "./System/MovementSystem"
@@ -12,9 +12,8 @@ import { NetManager } from "./Manager/NetManager"
 import { ModelsManager } from "./Manager/ModelsManager"
 import { FramesManager } from "./Manager/FramesManager"
 import { SystemManager } from "./Manager/SystemManager"
-import { GEnum } from "./Config/Enum"
 
-import { GlobalEnum } from "./Type/Index"
+import { Layer } from './Type'
 const { ccclass, property } = _decorator;
 
 @ccclass('main')
@@ -83,7 +82,7 @@ export class main extends Component {
 
     //** 层级管理器初始化 */
     private initLayerManager() {
-        const layerList = [{ id: GEnum.LayerId.playerLayer, layer: this.playerLayer }]
+        const layerList = [{ id: Layer.EnumLayerId.PlayerLayer, layer: this.playerLayer }]
         LayerManager.init(layerList)
     }
 

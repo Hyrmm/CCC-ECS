@@ -1,26 +1,17 @@
-import { LayerIdEnum } from "../Config/Enum"
-import { InputComponent, PhysicalComponent, PlayerComponents, PositionComponent, RenderComponent } from "../Component/ECSComponent"
 import { ecs } from "../Core/ECS"
+import { Layer, Entity } from "../Type"
+import { InputComponent, PhysicalComponent, PlayerComponents, PositionComponent, RenderComponent } from "../Component/ECSComponent"
+
 
 
 export class BaseEntity extends ecs.Entity {
-    public config: I_EntityConfig
+    public config: Entity.TypeEntityConfig
 }
 
-export interface I_EntityConfig {
-    name: string
-    layerId: number
-    components: Array<ctor<ecs.ECSComponent>>
-    moveClipsName?: string
-    prefebName?: string
-    velocity?: [number, number]
-}
-
-
-export const entityConfig: { [key: string]: I_EntityConfig } = {
+export const entityConfig: { [key: string]: Entity.TypeEntityConfig } = {
     selfPlayerEntityConfig: {
         name: "player",
-        layerId: LayerIdEnum.playerLayer,
+        layerId: Layer.EnumLayerId.PlayerLayer,
         components: [PositionComponent, PhysicalComponent, InputComponent, RenderComponent, PlayerComponents],
         velocity: [1, 1],
         moveClipsName: "captain",
@@ -28,7 +19,7 @@ export const entityConfig: { [key: string]: I_EntityConfig } = {
     },
     otherPlayerEntityConfig: {
         name: "player",
-        layerId: LayerIdEnum.playerLayer,
+        layerId: Layer.EnumLayerId.PlayerLayer,
         components: [PositionComponent, PhysicalComponent, RenderComponent, PlayerComponents],
         velocity: [1, 1],
         moveClipsName: "captain",

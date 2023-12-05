@@ -1,3 +1,4 @@
+import * as pb from "../Proto/pb";
 import { BaseModel } from "./BaseModel";
 import { EnumProtoId, EnumProtoName, protoName2Id } from "../Proto/protoMap";
 import { ModelsManager } from "../Manager/ModelsManager";
@@ -5,12 +6,16 @@ import { UserInfoModel } from "./UserInfoModel";
 import { EntityManager } from "../Manager/EntityManager";
 import { entityConfig } from "../Entity/Entity";
 import { FramesManager } from "../Manager/FramesManager";
-import * as pb from "../Proto/pb";
-import { GEnum, GType } from "../Config/Enum";
+import { LocalMsg, Input } from "../Type";
+
 
 export class FramesModel extends BaseModel {
     private playerId: number = 10086
     protected dataBase: DateBase = { pendingFrames: [] }
+
+    public resetDatabase(): void {
+        this.dataBase = { pendingFrames: [] }
+    }
 
     public initListener(): void {
         this.regeisterListener(EnumProtoName.S2C_Frames, this.parseFrame, this)
@@ -18,10 +23,8 @@ export class FramesModel extends BaseModel {
         this.regeisterListener(EnumProtoName.S2C_SyncRoomStatus, this.parseSyncRoomStatus, this)
 
 
-        this.regeisterListenerLocal(GEnum.LocalMsg.LoginSucess, this.handleLoginSucess, this)
+        this.regeisterListenerLocal(LocalMsg.EnumLocalMsg.LoginSucess, this.handleLoginSucess, this)
     }
-
-
 
     public applyFrame(data: pb.C2S_Frames) {
         this.sendMsg(protoName2Id.C2S_Frames, data)
@@ -31,7 +34,7 @@ export class FramesModel extends BaseModel {
         this.sendMsg(EnumProtoId.C2S_PlayerJoin, data)
     }
 
-    public applyPlayerMoveInputs(sendData: GType.PlayerMove) {
+    public applyPlayerMoveInputs(sendData: Input.TypePlayerMove) {
         const data: pb.C2S_Frames = { playerMove: { playerId: this.playerId, dt: sendData.dt, velocityX: sendData.velocityX, velocityY: sendData.velocityY } }
         this.applyFrame(data)
     }
@@ -67,8 +70,10 @@ export class FramesModel extends BaseModel {
                 EntityManager.createEntity(config)
             }
         }
+        if (!FramesManager.asyncSchedule) {
+            FramesManager.startSyncFrames()
+        }
 
-        FramesManager.startSyncFrames()
     }
 
     private handleLoginSucess() {

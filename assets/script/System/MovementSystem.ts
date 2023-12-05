@@ -3,8 +3,7 @@ import { Vec3 } from "cc"
 import { PositionComponent, InputComponent, PhysicalComponent, PlayerComponents } from "../Component/ECSComponent"
 import { FramesManager } from "../Manager/FramesManager"
 import { BaseSystem } from "./System"
-import { BaseEntity } from "../Entity/Entity"
-import { GEnum, GType } from "../Config/Enum"
+import { Input } from "../Type"
 
 export class MovementSystem extends BaseSystem {
 
@@ -33,7 +32,7 @@ export class MovementSystem extends BaseSystem {
 
             // 一旦有朝向说明有移动，向服务器同步操作
             if (directionX != 0 || directionY != 0) {
-                FramesManager.applyInputs(GEnum.InputsType.PlayerMove, { playerMove: { dt: Math.ceil(dt * 1000), velocityX: velocityX * directionX, velocityY: velocityY * directionY } })
+                FramesManager.applyInputs(Input.EnumInputTypeName.PlayerMove, { playerMove: { dt: Math.ceil(dt * 1000), velocityX: velocityX * directionX, velocityY: velocityY * directionY } })
                 // position.add(new Vec3(timeOffset * velocityX * 100 * directionX, timeOffset * velocityY * 100 * directionY, 0))
             }
 
@@ -44,9 +43,9 @@ export class MovementSystem extends BaseSystem {
     * 针对性更新玩家实体位置
     * @param dt 帧间隔(千分之毫秒)
     */
-    public updatePlayerPositon(playerMoveArr: Array<GType.PlayerMove>) {
+    public updatePlayerPositon(playerMoveArr: Array<Input.TypePlayerMove>) {
         // 移动数据结构处理
-        const playerId2PlayerMoveMap: Map<number, GType.PlayerMove> = new Map()
+        const playerId2PlayerMoveMap: Map<number, Input.TypePlayerMove> = new Map()
         for (const playerMove of playerMoveArr) {
             playerId2PlayerMoveMap.set(playerMove.playerId, playerMove)
         }
@@ -78,30 +77,35 @@ export class MovementSystem extends BaseSystem {
         const curPresingKeyCode = inputCom.keyPresingCode[inputCom.keyPresingCode.length - 1]
 
         switch (curPresingKeyCode) {
-            case GEnum.KeyCode.Up: {
-                directionX = 0
-                directionY = 1
-                break
-            }
-            case GEnum.KeyCode.Down: {
-                directionX = 0
-                directionY = -1
-                break
-            }
-            case GEnum.KeyCode.Left: {
-                directionX = -1
-                directionY = 0
-                break
-            }
-            case GEnum.KeyCode.Right: {
-                directionX = 1
-                directionY = 0
-                break
-            }
-            default: {
-                directionX = 0
-                directionY = 0
-            }
+            case Input.EnumDirKeyCode.Up:
+                {
+                    directionX = 0
+                    directionY = 1
+                    break
+                }
+            case Input.EnumDirKeyCode.Down:
+                {
+                    directionX = 0
+                    directionY = -1
+                    break
+                }
+            case Input.EnumDirKeyCode.Left:
+                {
+                    directionX = -1
+                    directionY = 0
+                    break
+                }
+            case Input.EnumDirKeyCode.Right:
+                {
+                    directionX = 1
+                    directionY = 0
+                    break
+                }
+            default:
+                {
+                    directionX = 0
+                    directionY = 0
+                }
         }
 
         return { directionX, directionY }

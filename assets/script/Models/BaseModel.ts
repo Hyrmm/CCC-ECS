@@ -1,13 +1,16 @@
-import { GEnum } from "../Config/Enum"
 import { EventManager } from "../Manager/EventManager"
 import { NetManager } from "../Manager/NetManager"
 import { EnumProtoName } from "../Proto/protoMap"
+import { LocalMsg } from "../Type"
 export class BaseModel {
     protected dataBase: any
 
     public initListener(): void {
 
     }
+
+    public resetDatabase(): void { }
+
     /**
      * 注册监听消息(协议)
      * @param msgName 事件名
@@ -18,7 +21,7 @@ export class BaseModel {
         EventManager.on(msgName, callback, target ? target : this)
     }
 
-    protected regeisterListenerLocal<T extends BaseModel>(msgName: GEnum.LocalMsg, callback: (param) => void, target?: T) {
+    protected regeisterListenerLocal<T extends BaseModel>(msgName: LocalMsg.EnumLocalMsg, callback: (param) => void, target?: T) {
         EventManager.on(msgName, callback, target ? target : this)
     }
 

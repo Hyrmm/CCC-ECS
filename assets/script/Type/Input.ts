@@ -1,8 +1,16 @@
 
 
+
+export enum EnumDirKeyCode {
+    Up = 87,
+    Down = 83,
+    Left = 65,
+    Right = 68
+}
 export enum EnumInputTypeName {
     PlayerMove = "playerMove"
 }
+
 
 
 

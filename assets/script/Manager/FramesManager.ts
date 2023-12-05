@@ -1,19 +1,17 @@
-import { GEnum, GInterface } from "../Config/Enum"
 import { FramesModel } from "../Models/FramesModel"
 import { S2C_Frames } from "../Proto/pb"
 import { MovementSystem } from "../System/MovementSystem"
 import { RootSystem } from "../System/RootSystem"
 import { ModelsManager } from "./ModelsManager"
 import { SystemManager } from "./SystemManager"
+import { Input } from "../Type"
 
 export class FramesManager {
 
     static pendingInputs: Array<any>
     static pendingFrames: Array<S2C_Frames>
 
-
     static framesModel: FramesModel
-
     static asyncSchedule: Symbol
 
     static init() {
@@ -23,6 +21,12 @@ export class FramesManager {
     static startSyncFrames() {
         const rootSystem = SystemManager.getSystem(RootSystem)
         this.asyncSchedule = rootSystem.addFramesSchedule(this.syncFrames, this)
+    }
+
+    static stopSyncFrames() {
+        const rootSystem = SystemManager.getSystem(RootSystem)
+        rootSystem.delFramesSchedule(this.asyncSchedule)
+        this.asyncSchedule = null
     }
 
     /**
@@ -67,10 +71,10 @@ export class FramesManager {
     * @param inputsType 输入类型名称
     * @param inputs 对应类型数据
     */
-    static applyInputs(inputsType: GEnum.InputsType, inputs: GInterface.InputsTypeLocal) {
+    static applyInputs(inputsType: Input.EnumInputTypeName, inputs: Input.TypeInputLocal) {
         switch (inputsType) {
             // 移动
-            case GEnum.InputsType.PlayerMove: {
+            case Input.EnumInputTypeName.PlayerMove: {
                 this.framesModel.applyPlayerMoveInputs(inputs.playerMove)
                 break
             }
@@ -87,7 +91,7 @@ export class FramesManager {
     */
     static preParseInputs(frame: S2C_Frames) {
         if (frame.playerMove) {
-            this.parseInputs(GEnum.InputsType.PlayerMove, { playerMove: frame.playerMove })
+            this.parseInputs(Input.EnumInputTypeName.PlayerMove, { playerMove: frame.playerMove })
         }
     }
 
@@ -96,10 +100,10 @@ export class FramesManager {
     * @param inputsType 输入类型名称
     * @param inputs 对应类型数据
     */
-    static parseInputs(inputsType: GEnum.InputsType, inputs: GInterface.InputsTypeServe) {
+    static parseInputs(inputsType: Input.EnumInputTypeName, inputs: Input.TypeInputServe) {
         switch (inputsType) {
             // 移动
-            case GEnum.InputsType.PlayerMove: {
+            case Input.EnumInputTypeName.PlayerMove: {
                 const movementSystem = SystemManager.getSystem(MovementSystem)
                 movementSystem.updatePlayerPositon(inputs.playerMove)
                 break

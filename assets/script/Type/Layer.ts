@@ -12,4 +12,4 @@ export enum EnumLayerId {
 }
 
 
-export type TypeLayerConfig = { id: number, layer: Node }
+export type TypeLayerConfig = { id: EnumLayerId, layer: Node }

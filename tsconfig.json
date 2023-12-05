@@ -4,8 +4,5 @@
     "target": "ES2016",
     "module": "ES2015",
     "strict": false,
-    "types": [
-      "./assets/script/config/Enum",
-    ]
   }
 }

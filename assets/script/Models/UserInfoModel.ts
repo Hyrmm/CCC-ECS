@@ -1,11 +1,15 @@
-import { GEnum } from "../Config/Enum";
 import { EventManager } from "../Manager/EventManager";
 import { S2C_Login } from "../Proto/pb";
 import { EnumProtoId, EnumProtoName } from "../Proto/protoMap";
 import { BaseModel } from "./BaseModel";
+import { LocalMsg } from "../Type";
 
 export class UserInfoModel extends BaseModel {
     protected dataBase: DateBase = { userUuid: "" }
+
+    public resetDatabase(): void {
+        this.dataBase = { userUuid: "" }
+    }
 
     public initListener(): void {
         this.regeisterListener(EnumProtoName.S2C_Login, this.parseLogin, this)
@@ -21,7 +25,7 @@ export class UserInfoModel extends BaseModel {
 
     private parseLogin(recvData: S2C_Login): void {
         this.dataBase.userUuid = recvData.uuid
-        EventManager.emit(GEnum.LocalMsg.LoginSucess)
+        EventManager.emit(LocalMsg.EnumLocalMsg.LoginSucess)
     }
 
 

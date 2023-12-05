@@ -62,6 +62,14 @@ export class ModelsManager {
     static getModel<T extends BaseModel>(modelCls: ctor<T>): T {
         return this.modelMap.getInstance(modelCls.name)
     }
+
+    /**
+    * 获取所有model实例
+    * @param modelCls model类
+    */
+    static getModels(): Array<BaseModel> {
+        return this.modelMap.getAllInstance()
+    }
 }
 
 type ctor<T = unknown> = new (...args: any[]) => T
