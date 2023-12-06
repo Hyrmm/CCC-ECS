@@ -1,8 +1,6 @@
-
 import { BaseModel } from "../Models/BaseModel"
 import { FramesModel } from "../Models/FramesModel"
 import { UserInfoModel } from "../Models/UserInfoModel"
-
 class ModelMap {
     private map: Map<string, BaseModel> = new Map()
     private array: Array<BaseModel> = []

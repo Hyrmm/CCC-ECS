@@ -1,9 +1,13 @@
 import { EventManager } from "../Manager/EventManager"
-import { NetManager } from "../Manager/NetManager"
 import { EnumProtoName } from "../Proto/protoMap"
 import { LocalMsg } from "../Type"
+import { NetManager } from "../Manager/NetManager"
 export class BaseModel {
     protected dataBase: any
+
+    public constructor() {
+
+    }
 
     public initListener(): void {
 

@@ -1,4 +1,4 @@
-import { ecs } from "../Core/ECS"
+import { ecs } from "../../Core/ECS"
 import { PositionComponent } from "../Component/PositionComponent"
 import { RenderComponent } from "../Component/RenderComponent"
 import { BaseSystem } from "./System";

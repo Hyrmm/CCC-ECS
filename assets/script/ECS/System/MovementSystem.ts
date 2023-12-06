@@ -1,9 +1,9 @@
-import { ecs } from "../Core/ECS"
+import { ecs } from "../../Core/ECS"
 import { Vec3 } from "cc"
 import { PositionComponent, InputComponent, PhysicalComponent, PlayerComponents } from "../Component/ECSComponent"
-import { FramesManager } from "../Manager/FramesManager"
+import { FramesManager } from "../../Manager/FramesManager"
 import { BaseSystem } from "./System"
-import { Input } from "../Type"
+import { Input } from "../../Type"
 
 export class MovementSystem extends BaseSystem {
 

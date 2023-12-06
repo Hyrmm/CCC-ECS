@@ -1,4 +1,4 @@
-import { ecs } from "../Core/ECS"
+import { ecs } from "../../Core/ECS"
 import { BaseComponent } from "./Component"
 import { _decorator, Vec3, Vec2 } from 'cc'
 const { ccclass, property } = _decorator

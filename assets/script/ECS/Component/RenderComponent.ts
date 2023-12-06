@@ -1,5 +1,5 @@
 import { BaseComponent } from "./Component"
-import { ecs } from "../Core/ECS"
+import { ecs } from "../../Core/ECS"
 import { _decorator } from 'cc'
 const { ccclass, property } = _decorator
 

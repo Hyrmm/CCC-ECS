@@ -1,9 +1,9 @@
 import { Prefab, instantiate, log } from "cc"
 import { ecs } from "../Core/ECS"
 import { LayerManager } from "../Manager/LayerManager"
-import { BaseEntity } from "../Entity/Entity"
+import { BaseEntity } from "../ECS/Entity/Entity"
 import { AssetsManager } from "./AssetsManager"
-import { PhysicalComponent } from "../Component/PhysicalComponent"
+import { PhysicalComponent } from "../ECS/Component/PhysicalComponent"
 import { Entity, Layer } from "../Type"
 
 

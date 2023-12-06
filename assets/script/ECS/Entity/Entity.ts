@@ -1,5 +1,5 @@
-import { ecs } from "../Core/ECS"
-import { Layer, Entity } from "../Type"
+import { ecs } from "../../Core/ECS"
+import { Layer, Entity } from "../../Type"
 import { InputComponent, PhysicalComponent, PlayerComponents, PositionComponent, RenderComponent } from "../Component/ECSComponent"
 
 

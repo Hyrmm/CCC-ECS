@@ -1,5 +1,5 @@
 
-import { BaseSystem } from "../System/System"
+import { BaseSystem } from "../ECS/System/System"
 
 class SystemMap {
     private map: Map<string, BaseSystem> = new Map()

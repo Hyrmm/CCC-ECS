@@ -4,7 +4,7 @@ import { EnumProtoId, EnumProtoName, protoName2Id } from "../Proto/protoMap";
 import { ModelsManager } from "../Manager/ModelsManager";
 import { UserInfoModel } from "./UserInfoModel";
 import { EntityManager } from "../Manager/EntityManager";
-import { entityConfig } from "../Entity/Entity";
+import { entityConfig } from "../ECS/Entity/Entity";
 import { FramesManager } from "../Manager/FramesManager";
 import { LocalMsg, Input } from "../Type";
 
@@ -48,17 +48,17 @@ export class FramesModel extends BaseModel {
     }
 
     private parsePalyerJoin(recvData: pb.S2C_PlayerJoin) {
-        const userUuid = ModelsManager.getModel(UserInfoModel).userUuid
+        // const userUuid = ModelsManager.getModel(UserInfoModel).userUuid
 
-        if (recvData.uuid == userUuid) {
-            // 自己本人
-            const config = entityConfig.selfPlayerEntityConfig
-            EntityManager.createEntity(config)
-        } else {
-            // 其他玩家
-            const config = entityConfig.otherPlayerEntityConfig
-            EntityManager.createEntity(config)
-        }
+        // if (recvData.uuid == userUuid) {
+        //     // 自己本人
+        //     const config = entityConfig.selfPlayerEntityConfig
+        //     EntityManager.createEntity(config)
+        // } else {
+        //     // 其他玩家
+        //     const config = entityConfig.otherPlayerEntityConfig
+        //     EntityManager.createEntity(config)
+        // }
     }
 
     private parseSyncRoomStatus(recvData: pb.S2C_SyncRoomStatus) {

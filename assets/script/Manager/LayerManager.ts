@@ -1,5 +1,5 @@
 import { Node } from "cc"
-import { BaseEntity } from "../Entity/Entity"
+import { BaseEntity } from "../ECS/Entity/Entity"
 import { Layer } from "../Type"
 
 

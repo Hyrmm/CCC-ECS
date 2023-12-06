@@ -1,8 +1,8 @@
 import { EventManager } from "../Manager/EventManager";
 import { S2C_Login } from "../Proto/pb";
 import { EnumProtoId, EnumProtoName } from "../Proto/protoMap";
-import { BaseModel } from "./BaseModel";
 import { LocalMsg } from "../Type";
+import { BaseModel } from "./BaseModel";
 
 export class UserInfoModel extends BaseModel {
     protected dataBase: DateBase = { userUuid: "" }

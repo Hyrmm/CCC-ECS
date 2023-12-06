@@ -1,4 +1,4 @@
-import { ecs } from "../Core/ECS"
+import { ecs } from "../../Core/ECS"
 import { EventKeyboard, KeyCode } from "cc"
 import { InputComponent } from "../Component/ECSComponent"
 import { BaseSystem } from "./System"

@@ -1,23 +1,21 @@
-import { _decorator, Component, Node, Input, input, game, Game } from 'cc'
-import { RootSystem } from './System/RootSystem'
-import { RenderSystem } from './System/RenderSystem'
-import { MovementSystem } from "./System/MovementSystem"
-import { InputListenerSystem } from "./System/InputListenerSystem"
-import { LayerManager } from "./Manager/LayerManager"
-import { EntityManager } from "./Manager/EntityManager"
-import { AssetsManager } from "./Manager/AssetsManager"
-
-
+import { RootSystem } from './ECS/System/RootSystem'
+import { RenderSystem } from './ECS/System/RenderSystem'
+import { MovementSystem } from "./ECS/System/MovementSystem"
+import { InputListenerSystem } from "./ECS/System/InputListenerSystem"
 import { NetManager } from "./Manager/NetManager"
 import { ModelsManager } from "./Manager/ModelsManager"
 import { FramesManager } from "./Manager/FramesManager"
+import { LayerManager } from "./Manager/LayerManager"
+import { EntityManager } from "./Manager/EntityManager"
+import { AssetsManager } from "./Manager/AssetsManager"
 import { SystemManager } from "./Manager/SystemManager"
 
 import { Layer } from './Type'
-const { ccclass, property } = _decorator;
+import { _decorator, Component, Node, Input, input, game, Game } from 'cc'
+const { ccclass, property } = _decorator
 
-@ccclass('main')
-export class main extends Component {
+@ccclass
+export class Main extends Component {
 
     @property(Node)
     playerLayer: Node = null
