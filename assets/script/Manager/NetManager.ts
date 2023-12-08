@@ -1,7 +1,6 @@
-import { protoId2Name, protoName2Id, EnumProtoName } from "../Proto/protoMap"
-import { EventManager } from "./EventManager"
 import * as pb from "../Proto/pb"
-// import { ModelsManager } from "./ModelsManager"
+import { EventManager } from "./EventManager"
+import { protoId2Name, protoName2Id, EnumProtoName } from "../Proto/protoMap"
 export class NetManager {
     static webSocket: WebSocket
 
@@ -30,10 +29,6 @@ export class NetManager {
     static onClose(ev: Event) {
         console.log(`[clientClose]:`, ev)
         this.clearHearbeatInterval()
-        // const allModelsArr = ModelsManager.getModels()
-        // for (const model of allModelsArr) {
-        //     model.resetDatabase()
-        // }
     }
 
     static doConnect() {

@@ -1,9 +1,9 @@
-import { FramesModel } from "../Models/FramesModel"
-import { S2C_Frames } from "../Proto/pb"
-import { MovementSystem } from "../ECS/System/MovementSystem"
 import { RootSystem } from "../ECS/System/RootSystem"
+import { MovementSystem } from "../ECS/System/MovementSystem"
+import { FramesModel } from "../Models/FramesModel"
 import { ModelsManager } from "./ModelsManager"
 import { SystemManager } from "./SystemManager"
+import { S2C_Frames } from "../Proto/pb"
 import { Input } from "../Type"
 
 export class FramesManager {
