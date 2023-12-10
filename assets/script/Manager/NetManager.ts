@@ -1,6 +1,6 @@
-import * as pb from "../Proto/pb"
+import * as pb from "../Proto/proto"
 import { EventManager } from "./EventManager"
-import { protoId2Name, protoName2Id, EnumProtoName } from "../Proto/protoMap"
+import { protoId2Name, protoName2Id, EnumProtoName, EnumProtoId } from "../Proto/protoMap"
 export class NetManager {
     static webSocket: WebSocket
 
@@ -32,7 +32,7 @@ export class NetManager {
     }
 
     static doConnect() {
-        this.webSocket = new WebSocket("ws://172.16.40.61:8888")
+        this.webSocket = new WebSocket("ws://192.168.0.104:8888")
         this.webSocket.binaryType = "arraybuffer"
         const self = this
         this.webSocket.onopen = (ev) => {
@@ -67,7 +67,7 @@ export class NetManager {
         const bodyData = pb[`decode${protoName}`](commonData.body)
 
         // 心跳特殊处理
-        if (protoId == 1000) {
+        if (protoId == EnumProtoId.S2C_HeartBeat) {
             this.recvHeartbeat(bodyData as pb.C2S_HeartBeat)
         }
 
@@ -97,7 +97,7 @@ export class NetManager {
 
     static sendHeartbeat() {
         const data: pb.C2S_HeartBeat = { serverTime: this.serverTiem }
-        this.sendData(1001, data)
+        this.sendData(EnumProtoId.C2S_HeartBeat, data)
     }
 
     static recvHeartbeat(data: pb.C2S_HeartBeat) {

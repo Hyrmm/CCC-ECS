@@ -26,7 +26,7 @@
     "_prefab": null,
     "autoReleaseAssets": false,
     "_globals": {
-      "__id__": 11
+      "__id__": 12
     },
     "_id": "b4dffe28-e21e-46ea-bd4d-129c7de4b4b1"
   },
@@ -52,13 +52,16 @@
       },
       {
         "__id__": 10
+      },
+      {
+        "__id__": 11
       }
     ],
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 480,
-      "y": 320,
+      "x": 960,
+      "y": 540,
       "z": 0
     },
     "_lrot": {
@@ -175,8 +178,8 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 960,
-      "height": 640
+      "width": 1920,
+      "height": 1080
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -213,7 +216,7 @@
     "_priority": 1073741824,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 320,
+    "_orthoHeight": 593.0501930501931,
     "_near": 0,
     "_far": 2000,
     "_color": {
@@ -260,8 +263,8 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 480,
-      "y": 320,
+      "x": 960,
+      "y": 540,
       "z": 1000
     },
     "_lrot": {
@@ -298,7 +301,7 @@
     "_alignFlags": 45,
     "_target": null,
     "_left": 0,
-    "_right": 2.157303370786508,
+    "_right": 1.1368683772161603e-13,
     "_top": 0,
     "_bottom": 0,
     "_horizontalCenter": 0,
@@ -316,21 +319,35 @@
     "_id": "c5V1EV8IpMtrIvY1OE9t2u"
   },
   {
+    "__type__": "bf4c52uhLVNMIGBO8klwXb4",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 2
+    },
+    "_enabled": true,
+    "__prefab": null,
+    "playerLayer": {
+      "__id__": 3
+    },
+    "_id": "65dcsNfrFGuaXuUU7xhsQF"
+  },
+  {
     "__type__": "cc.SceneGlobals",
     "ambient": {
-      "__id__": 12
-    },
-    "shadows": {
       "__id__": 13
     },
-    "_skybox": {
+    "shadows": {
       "__id__": 14
     },
-    "fog": {
+    "_skybox": {
       "__id__": 15
     },
-    "octree": {
+    "fog": {
       "__id__": 16
+    },
+    "octree": {
+      "__id__": 17
     }
   },
   {

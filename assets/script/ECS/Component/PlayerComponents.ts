@@ -7,10 +7,10 @@ const { ccclass, property } = _decorator
 @ecs.ECSDecorator.registerECSComName('PlayerComponents')
 @ccclass('PlayerComponents')
 export class PlayerComponents extends BaseComponent {
-    public playerId: number = 10086
+    public playerId: string
 
     start() {
-
+        
     }
 
     update(deltaTime: number) {

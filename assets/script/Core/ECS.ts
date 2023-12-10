@@ -1,4 +1,4 @@
-import { Component, Node } from "cc"
+import { Component, Node, NodePool } from "cc"
 
 
 
@@ -16,6 +16,7 @@ export module ecs {
 
     export const systemPool: systemPool = []
     export const entityPool: entityPool = []
+    export const entityPoolMap: Map<string, Entity> = new Map()
 
     export const comName2EntityPool: Map<comName, entityPool> = new Map()
 
@@ -44,7 +45,26 @@ export module ecs {
         static createEntity<T extends Entity>(entityCls: ctor<T>, entityName: string): T {
             const entity = new entityCls(entityName)
             entity.entityId = entityPool.push(entity) - 1
+            entityPoolMap.set(entity.uuid, entity)
             return entity
+        }
+
+        /**
+         * 删除实体
+         * @param entity 实体,泛型接受继承ecs.Entity
+         */
+        static deleteEntity<T extends Entity>(entity: T) {
+            entityPool[entity.entityId] = null
+            entityPoolMap.delete(entity.name)
+
+            // 组件分类查询组件池清除
+            for (const comName of Object.keys(entity.name2ECSComponent)) {
+                const comGroupEntityPool = comName2EntityPool.get(comName)
+                const newEntityPool = comGroupEntityPool.filter((poolEntity) => poolEntity.entityId != entity.entityId)
+                comName2EntityPool.set(comName, newEntityPool)
+            }
+            
+            entity.destroy()
         }
 
         /**
@@ -72,7 +92,7 @@ export module ecs {
          * 向实体添加组件
          * @param comCls 组件类
         */
-        public addComs<T extends ECSComponent>(comCls: Array< ctor<T> >): void {
+        public addComs<T extends ECSComponent>(comCls: Array<ctor<T>>): void {
             for (const componentCtor of comCls) {
                 this.addCom(componentCtor)
             }

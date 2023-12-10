@@ -50,9 +50,9 @@ export class RootSystem extends BaseSystem {
         afterFilterSystemPool = afterFilterSystemPool.sort((preSystem, nextSystem) => preSystem.priority - nextSystem.priority)
 
 
-        afterFilterSystemPool.forEach((system) => {
-            system.update(dt)
-        })
+        for (const subSystem of afterFilterSystemPool) {
+            subSystem.update(dt)
+        }
 
         this.executeFramesSchedule(dt)
     }

@@ -37,6 +37,14 @@ export class LayerManager {
             targetLayer.addChild(entity)
         }
     }
+
+    static offEntityFromLayer(layerId: Layer.EnumLayerId, entity: BaseEntity) {
+        const targetLayer = this.layersPool.get(layerId)
+
+        if (targetLayer) {
+            targetLayer.removeChild(entity)
+        }
+    }
 }
 
 

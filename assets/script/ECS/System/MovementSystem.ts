@@ -45,20 +45,23 @@ export class MovementSystem extends BaseSystem {
     */
     public updatePlayerPositon(playerMoveArr: Array<Input.TypePlayerMove>) {
         // 移动数据结构处理
-        const playerId2PlayerMoveMap: Map<number, Input.TypePlayerMove> = new Map()
+        const playerId2PlayerMoveMap: Map<string, Input.TypePlayerMove> = new Map()
         for (const playerMove of playerMoveArr) {
             playerId2PlayerMoveMap.set(playerMove.playerId, playerMove)
         }
 
-        const entitys = ecs.ECSQuery.withComsBoth(PositionComponent, PhysicalComponent, InputComponent, PlayerComponents)
+        const entitys = ecs.ECSQuery.withComsBoth(PositionComponent, PhysicalComponent, PlayerComponents)
         for (const entity of entitys) {
             const playerCom = entity.getComponent(PlayerComponents)
             const positionCom = entity.getCom(PositionComponent)
             const playerMoveData = playerId2PlayerMoveMap.get(playerCom.playerId)
 
-            const posX = playerMoveData.dt * playerMoveData.velocityX
-            const posY = playerMoveData.dt * playerMoveData.velocityY
-            positionCom.position.add(new Vec3(posX / 5, posY / 5, 0))
+            if (playerMoveData) {
+                const posX = playerMoveData.dt * playerMoveData.velocityX
+                const posY = playerMoveData.dt * playerMoveData.velocityY
+                positionCom.position.add(new Vec3(posX / 5, posY / 5, 0))
+            }
+
         }
 
 

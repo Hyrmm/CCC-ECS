@@ -1,5 +1,5 @@
 import { EventManager } from "../Manager/EventManager";
-import { S2C_Login } from "../Proto/pb";
+import { S2C_Login } from "../Proto/proto";
 import { EnumProtoId, EnumProtoName } from "../Proto/protoMap";
 import { LocalMsg } from "../Type";
 import { BaseModel } from "./BaseModel";

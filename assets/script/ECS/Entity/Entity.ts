@@ -10,15 +10,15 @@ export class BaseEntity extends ecs.Entity {
 
 export const entityConfig: { [key: string]: Entity.TypeEntityConfig } = {
     selfPlayerEntityConfig: {
-        name: "player",
+        name: "playerSelf",
         layerId: Layer.EnumLayerId.PlayerLayer,
         components: [PositionComponent, PhysicalComponent, InputComponent, RenderComponent, PlayerComponents],
-        velocity: [1, 1],
+        velocity: [2, 2],
         moveClipsName: "captain",
         prefebName: "player"
     },
     otherPlayerEntityConfig: {
-        name: "player",
+        name: "playerOther",
         layerId: Layer.EnumLayerId.PlayerLayer,
         components: [PositionComponent, PhysicalComponent, RenderComponent, PlayerComponents],
         velocity: [1, 1],

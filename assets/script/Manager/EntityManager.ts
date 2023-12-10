@@ -1,10 +1,11 @@
-import { Prefab, instantiate, log } from "cc"
+import { Prefab, instantiate, NodePool, isValid } from "cc"
 import { ecs } from "../Core/ECS"
 import { LayerManager } from "../Manager/LayerManager"
 import { BaseEntity } from "../ECS/Entity/Entity"
 import { AssetsManager } from "./AssetsManager"
 import { PhysicalComponent } from "../ECS/Component/PhysicalComponent"
 import { Entity, Layer } from "../Type"
+import { PlayerComponents } from "../ECS/Component/PlayerComponents"
 
 
 
@@ -30,7 +31,25 @@ export class EntityManager {
         return entity
     }
 
-    // 绑定数据
+    static deleteEntity(entity: BaseEntity) {
+        ecs.Entity.deleteEntity(entity)
+    }
+
+    static deletePlayerEntity(userUuid: string) {
+        const entitys = ecs.ECSQuery.withComsBoth(PlayerComponents)
+        for (const entity of entitys) {
+            const playerCom = entity.getComponent(PlayerComponents)
+            if (playerCom.playerId == userUuid) {
+                return this.deleteEntity(entity as BaseEntity)
+            }
+        }
+    }
+
+    /**
+     * 绑定实体配置
+     * @param entityConfig 
+     * @param entity 
+     */
     static bindEntityConfig(entityConfig: Entity.TypeEntityConfig, entity: BaseEntity) {
         // 速度
         if (entityConfig.velocity) {
@@ -44,15 +63,24 @@ export class EntityManager {
             AssetsManager.getPrefeb(`entity/${entityConfig.prefebName}`, (prefebAssets: Prefab) => {
                 const prefebNode = instantiate(prefebAssets)
                 prefebNode.name = `entity/${entityConfig.prefebName}`
-                entity.addChild(prefebNode)
+                if (isValid(entity)) {
+                    entity.addChild(prefebNode)
+                }
             })
         }
     }
 
-    // 挂载层级
+    /**
+     * 放置到对应层级上
+     * @param layerId 
+     * @param entity 
+     */
     static setEntity2Layer(layerId: Layer.EnumLayerId, entity: BaseEntity) {
         LayerManager.setEntity2Layer(layerId, entity)
     }
+
+
+
 
 
 
