@@ -12,10 +12,9 @@ import { PlayerComponents } from "../ECS/Component/PlayerComponents"
 
 
 export class EntityManager {
-    static entitysPool: Array<ecs.Entity> = null
 
     static init() {
-        this.entitysPool = ecs.entityPool
+
     }
 
 

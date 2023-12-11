@@ -55,15 +55,15 @@ export module ecs {
          */
         static deleteEntity<T extends Entity>(entity: T) {
             entityPool[entity.entityId] = null
-            entityPoolMap.delete(entity.name)
+            entityPoolMap.delete(entity.uuid)
 
             // 组件分类查询组件池清除
-            for (const comName of Object.keys(entity.name2ECSComponent)) {
+            for (const comName of entity.name2ECSComponent.keys()) {
                 const comGroupEntityPool = comName2EntityPool.get(comName)
                 const newEntityPool = comGroupEntityPool.filter((poolEntity) => poolEntity.entityId != entity.entityId)
                 comName2EntityPool.set(comName, newEntityPool)
             }
-            
+
             entity.destroy()
         }
 
