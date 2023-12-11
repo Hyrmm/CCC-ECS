@@ -30,17 +30,32 @@ export class EntityManager {
         return entity
     }
 
-    static deleteEntity(entity: BaseEntity) {
+    static delEntity(entity: BaseEntity) {
         ecs.Entity.deleteEntity(entity)
     }
 
-    static deletePlayerEntity(userUuid: string) {
+    static delEntityByUserUuid(userUuid: string) {
         const entitys = ecs.ECSQuery.withComsBoth(PlayerComponents)
         for (const entity of entitys) {
             const playerCom = entity.getComponent(PlayerComponents)
             if (playerCom.playerId == userUuid) {
-                return this.deleteEntity(entity as BaseEntity)
+                return this.delEntity(entity as BaseEntity)
             }
+        }
+    }
+
+    static delEntityByLayerId(layerId: Layer.EnumLayerId) {
+        const layer = LayerManager.getLayerById(layerId)
+        const entitys = layer.children
+        for (const entity of entitys) {
+            this.delEntity(entity as BaseEntity)
+        }
+    }
+
+    static delEntityByEntityConfig(entityConfig: Entity.TypeEntityConfig) {
+        const ruledEntitys = ecs.ECSQuery.withComsBothOnly(...entityConfig.components)
+        for (const entity of ruledEntitys) {
+            this.delEntity(entity as BaseEntity)
         }
     }
 

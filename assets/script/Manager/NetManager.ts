@@ -1,6 +1,7 @@
 import * as pb from "../Proto/proto"
 import { EventManager } from "./EventManager"
 import { protoId2Name, protoName2Id, EnumProtoName, EnumProtoId } from "../Proto/protoMap"
+import { LocalMsg } from "../Type"
 export class NetManager {
     static webSocket: WebSocket
 
@@ -23,16 +24,21 @@ export class NetManager {
     }
 
     static onError(ev: Event) {
+        console.log(`[disConnect]===>`, ev)
+        this.webSocket = null
         this.clearHearbeatInterval()
+        EventManager.emit(LocalMsg.EnumLocalMsg.SocketDisconnect)
     }
 
     static onClose(ev: Event) {
-        console.log(`[clientClose]:`, ev)
+        console.log(`[disConnect]===>`, ev)
+        this.webSocket = null
         this.clearHearbeatInterval()
+        EventManager.emit(LocalMsg.EnumLocalMsg.SocketDisconnect)
     }
 
     static doConnect() {
-        this.webSocket = new WebSocket("ws://172.16.40.61:8888")
+        this.webSocket = new WebSocket("ws://192.168.0.104:8888")
         this.webSocket.binaryType = "arraybuffer"
         const self = this
         this.webSocket.onopen = (ev) => {
@@ -50,10 +56,11 @@ export class NetManager {
     }
 
     static reConnect() {
-        console.log(`[reConnect]:${this.webSocket}`)
-        if (this.webSocket && this.webSocket.readyState != this.webSocket.OPEN) {
+
+        if (!this.webSocket || (this.webSocket && this.webSocket.readyState != this.webSocket.OPEN)) {
             this.webSocket = null
             this.doConnect()
+            console.log(`[reConnect]===>`)
         }
 
     }

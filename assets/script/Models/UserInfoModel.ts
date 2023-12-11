@@ -13,10 +13,16 @@ export class UserInfoModel extends BaseModel {
 
     public initListener(): void {
         this.regeisterListener(EnumProtoName.S2C_Login, this.parseLogin, this)
+
+        this.regeisterListenerLocal(LocalMsg.EnumLocalMsg.SocketDisconnect, this.onSocketDisconnect, this)
     }
 
     public applyLogin() {
         this.sendMsg(EnumProtoId.C2S_Login, {})
+    }
+
+    public applyPlayerJoin() {
+        this.sendMsg(EnumProtoId.C2S_PlayerJoin, {})
     }
 
     public get userUuid(): string {
@@ -26,8 +32,12 @@ export class UserInfoModel extends BaseModel {
     private parseLogin(recvData: S2C_Login): void {
         this.dataBase.userUuid = recvData.uuid
         EventManager.emit(LocalMsg.EnumLocalMsg.LoginSucess)
+        this.applyPlayerJoin()
     }
 
+    private onSocketDisconnect() {
+        this.resetDatabase()
+    }
 
 
 }

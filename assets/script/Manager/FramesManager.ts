@@ -152,7 +152,7 @@ export class FramesManager {
             //离开
             case Input.EnumInputTypeName.PlayerLeave: {
                 for (const info of inputs.playerLeave) {
-                    EntityManager.deletePlayerEntity(info.player.uuid)
+                    EntityManager.delEntityByUserUuid(info.player.uuid)
                 }
                 break
             }

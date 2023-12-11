@@ -23,15 +23,11 @@ export class FramesModel extends BaseModel {
         this.regeisterListener(EnumProtoName.S2C_Frames, this.parseFrame, this)
         this.regeisterListener(EnumProtoName.S2C_SyncRoomStatus, this.parseSyncRoomStatus, this)
 
-        this.regeisterListenerLocal(LocalMsg.EnumLocalMsg.LoginSucess, this.handleLoginSucess, this)
+        this.regeisterListenerLocal(LocalMsg.EnumLocalMsg.SocketDisconnect, this.onSocketDisconnect, this)
     }
 
     public applyFrame(data: pb.C2S_Frames) {
         this.sendMsg(protoName2Id.C2S_Frames, data)
-    }
-
-    public applyPlayerJoin() {
-        this.sendMsg(EnumProtoId.C2S_PlayerJoin, {})
     }
 
 
@@ -76,9 +72,14 @@ export class FramesModel extends BaseModel {
 
     }
 
-    private handleLoginSucess() {
-        this.applyPlayerJoin()
+    private onSocketDisconnect() {
+        // 停止同步帧、清理实体信息
+        FramesManager.stopSyncFrames()
+        EntityManager.delEntityByEntityConfig(entityConfig.selfPlayerEntityConfig)
+        EntityManager.delEntityByEntityConfig(entityConfig.otherPlayerEntityConfig)
+        this.resetDatabase()
     }
+
 }
 
 interface DateBase {

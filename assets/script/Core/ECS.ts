@@ -30,8 +30,8 @@ export module ecs {
     export class Entity extends Node {
         public entityId: number
 
-        private ECSComponents: Array<ECSComponent> = []
-        private name2ECSComponent: Map<string, ECSComponent> = new Map()
+        public ECSComponents: Array<ECSComponent> = []
+        public name2ECSComponent: Map<string, ECSComponent> = new Map()
 
         constructor(name?: string) {
             super(name)
@@ -216,6 +216,16 @@ export module ecs {
             const withComs = this.withComs(...comCtors)
             const resultEntitys = withComs.filter((entity) => entity.hasCom(withoutCom))
             return resultEntitys
+        }
+
+        /**
+         * 仅同时持有某些组件
+         * @param comCtors 组件类
+         * @returns 
+         */
+        static withComsBothOnly(...comCtors: ctor<ECSComponent>[]): Array<Entity> {
+            let resultEntitys = this.withComsBoth(...comCtors)
+            return resultEntitys.filter((entity) => entity.ECSComponents.length == comCtors.length)
         }
     }
 

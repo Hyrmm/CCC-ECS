@@ -1,3 +1,4 @@
 export enum EnumLocalMsg {
-    LoginSucess = "LoginSucess"
+    LoginSucess = "LoginSucess",
+    SocketDisconnect = "socketDisconnect"
 }
