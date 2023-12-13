@@ -8,7 +8,7 @@ import { Input } from "../Type"
 import { UserInfoModel } from "../Models/UserInfoModel";
 import { BaseEntity, entityConfig } from "../ECS/Entity/Entity";
 import { EntityManager } from "./EntityManager";
-import { PlayerComponents } from "../ECS/Component/PlayerComponents";
+import { PlayerComponent } from "../ECS/Component/PlayerComponent";
 
 export class FramesManager {
 
@@ -81,7 +81,7 @@ export class FramesManager {
     }
 
     /**
-    * 提交输入到服务器
+    * 提交输入到服务端
     * @param inputsType 输入类型名称
     * @param inputs 对应类型数据
     */
@@ -100,8 +100,8 @@ export class FramesManager {
     }
 
     /**
-    * 預解析来自服务输入
-    * @param frame 幀消息
+    * 预解析来自服务端的输入
+    * @param frame 帧消息
     */
     static preParseInputs(frame: pb.S2C_Frames) {
 
@@ -119,7 +119,7 @@ export class FramesManager {
     }
 
     /**
-    * 解析来自服务输入
+    * 解析来自服务端输入
     * @param inputsType 输入类型名称
     * @param inputs 对应类型数据
     */
@@ -145,7 +145,7 @@ export class FramesManager {
                         const config = entityConfig.otherPlayerEntityConfig
                         playerEntity = EntityManager.createEntity(config)
                     }
-                    playerEntity.getComponent(PlayerComponents).playerId = info.player.uuid
+                    playerEntity.getComponent(PlayerComponent).playerId = info.player.uuid
                 }
                 break
             }
@@ -163,6 +163,10 @@ export class FramesManager {
         }
     }
 
+
+    static filterDirtyFrame(frames: Array<pb.S2C_Frames>) {
+
+    }
 
 
 }

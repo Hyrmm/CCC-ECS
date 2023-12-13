@@ -6,7 +6,7 @@ const { ccclass, property } = _decorator
 
 @ecs.ECSDecorator.registerECSComName('PlayerComponents')
 @ccclass('PlayerComponents')
-export class PlayerComponents extends BaseComponent {
+export class PlayerComponent extends BaseComponent {
     public playerId: string
 
     start() {

@@ -37,23 +37,22 @@ export class FramesModel extends BaseModel {
         this.applyFrame(data)
     }
 
-    public get pendingFrames(): Array<pb.S2C_Frames> {
-        return this.dataBase.pendingFrames
-    }
-
     private parseFrame(recvData: pb.S2C_Frames) {
         this.dataBase.pendingFrames.push(recvData)
     }
 
     private parseSyncRoomStatus(recvData: pb.S2C_SyncRoomStatus) {
         // 不停的接受房间历史的帧消息，直至所有帧全部拉完后，开始同步历史帧消息,且再同步正常的帧消息
-        this.historyPendingFrames = this.historyPendingFrames.concat(recvData.frames)
+        if (recvData.frames && recvData.frames.length) {
+            this.historyPendingFrames = this.historyPendingFrames.concat(recvData.frames)
+        }
+
         if (recvData.isSyncFinish == 1) {
             FramesManager.syncHistoryFrames(this.historyPendingFrames)
 
             // 服务器采用多轮事件循环分片的方式同步给客户端历史帧消息，以及一旦客户端加入房间后，服务器已经开始同步给客户端当前房间进行帧
             // 所以在同步完历史帧消息后，要去清理当前堆积帧中的脏数据，采用历史帧的最后一帧数和堆积帧进行比对
-            const lastHistoryFrame = recvData.frames[recvData.frames.length - 1]
+            const lastHistoryFrame = this.historyPendingFrames.length ? this.historyPendingFrames[this.historyPendingFrames.length - 1] : { frames: -1 }
             for (const [index, willSyncFrame] of this.dataBase.pendingFrames.entries()) {
                 if (willSyncFrame.frames > lastHistoryFrame.frames) {
                     this.dataBase.pendingFrames = this.dataBase.pendingFrames.slice(index)
@@ -80,6 +79,9 @@ export class FramesModel extends BaseModel {
         this.resetDatabase()
     }
 
+    public get pendingFrames(): Array<pb.S2C_Frames> {
+        return this.dataBase.pendingFrames
+    }
 }
 
 interface DateBase {

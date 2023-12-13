@@ -1,6 +1,6 @@
 import { ecs } from "../../Core/ECS"
 import { Vec3 } from "cc"
-import { PositionComponent, InputComponent, PhysicalComponent, PlayerComponents } from "../Component/ECSComponent"
+import { PositionComponent, InputComponent, PhysicalComponent, PlayerComponent } from "../Component/ECSComponent"
 import { FramesManager } from "../../Manager/FramesManager"
 import { BaseSystem } from "./System"
 import { Input } from "../../Type"
@@ -19,12 +19,7 @@ export class MovementSystem extends BaseSystem {
     public updateControllablePositon(dt: number) {
         const entitys = ecs.ECSQuery.withComsBoth(PositionComponent, PhysicalComponent, InputComponent)
         for (const entity of entitys) {
-            const timeOffset = dt
-
-            const positionCom = entity.getCom(PositionComponent)
             const physicalCom = entity.getCom(PhysicalComponent)
-
-            const position = positionCom.position
             const velocityX = physicalCom.velocityX
             const velocityY = physicalCom.velocityY
 
@@ -50,21 +45,20 @@ export class MovementSystem extends BaseSystem {
             playerId2PlayerMoveMap.set(playerMove.playerId, playerMove)
         }
 
-        const entitys = ecs.ECSQuery.withComsBoth(PositionComponent, PhysicalComponent, PlayerComponents)
+        const entitys = ecs.ECSQuery.withComsBoth(PositionComponent, PhysicalComponent, PlayerComponent)
         for (const entity of entitys) {
-            const playerCom = entity.getComponent(PlayerComponents)
+            const playerCom = entity.getComponent(PlayerComponent)
             const positionCom = entity.getCom(PositionComponent)
             const playerMoveData = playerId2PlayerMoveMap.get(playerCom.playerId)
 
             if (playerMoveData) {
-                const posX = playerMoveData.dt * playerMoveData.velocityX
-                const posY = playerMoveData.dt * playerMoveData.velocityY
-                positionCom.position.add(new Vec3(posX / 5, posY / 5, 0))
+                const posX = (playerMoveData.dt * playerMoveData.velocityX) / 5
+                const posY = (playerMoveData.dt * playerMoveData.velocityY) / 5
+                positionCom.shadowPosition.add(new Vec3(posX, posY, 0))
+                // positionCom.position.add(new Vec3(posX, posY, 0))
             }
 
         }
-
-
 
 
     }

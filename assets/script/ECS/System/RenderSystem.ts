@@ -1,6 +1,9 @@
+import { Vec3 } from "cc";
 import { ecs } from "../../Core/ECS"
+import { PlayerComponent } from "../Component/PlayerComponent";
 import { PositionComponent } from "../Component/PositionComponent"
 import { RenderComponent } from "../Component/RenderComponent"
+import { BaseEntity } from "../Entity/Entity";
 import { BaseSystem } from "./System";
 
 export class RenderSystem extends BaseSystem {
@@ -11,22 +14,39 @@ export class RenderSystem extends BaseSystem {
 
 
     update(dt?: number): void {
-        const needRenderEntitys = ecs.ECSQuery.withComsBoth(PositionComponent, RenderComponent)
-        for (const entity of needRenderEntitys) {
-            this.renderPosition(entity)
-        }
+        this.renderPlayerEntitys(dt)
     }
 
-    // 渲染位置
-    renderPosition(entity: ecs.Entity) {
+    /**
+     * 渲染位置
+     * @param entity 实体
+     */
+    private renderPosition(entity: BaseEntity) {
         const positionComponent = entity.getCom(PositionComponent)
         entity.setPosition(positionComponent.position)
     }
 
-    // 渲染方向
-    renderSprite(entity: ecs.Entity) {
-        const renderComponent = entity.getCom(RenderComponent)
+
+    /**
+     * 玩家实体影子追踪(插值渲染)
+     */
+    private renderPlayerEntitys(dt: number) {
+        const playerEntitys = ecs.ECSQuery.withComsBoth(PlayerComponent)
+        for (const entity of playerEntitys) {
+
+            const positionCom = entity.getCom(PositionComponent)
+            const curPos = positionCom.position
+            const curShadowPos = positionCom.shadowPosition
+            const offsetPos = new Vec3(curShadowPos.x - curPos.x, curShadowPos.y - curPos.y, 0)
+
+            if (offsetPos != Vec3.ZERO) {
+                const t = Math.ceil(dt * 1000) / (1000 / 60)
+                positionCom.position.add(new Vec3(t * offsetPos.x, t * offsetPos.y))
+            }
+            this.renderPosition(entity as BaseEntity)
+        }
     }
+
 
 }
 type ctor<T = unknown> = new (...args: any[]) => T;

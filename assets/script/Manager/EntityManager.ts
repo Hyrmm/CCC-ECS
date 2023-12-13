@@ -5,7 +5,7 @@ import { BaseEntity } from "../ECS/Entity/Entity"
 import { AssetsManager } from "./AssetsManager"
 import { PhysicalComponent } from "../ECS/Component/PhysicalComponent"
 import { Entity, Layer } from "../Type"
-import { PlayerComponents } from "../ECS/Component/PlayerComponents"
+import { PlayerComponent } from "../ECS/Component/PlayerComponent"
 
 
 
@@ -33,17 +33,24 @@ export class EntityManager {
     static delEntity(entity: BaseEntity) {
         ecs.Entity.deleteEntity(entity)
     }
-
+    /**
+     * 移除指定玩家类型实体，通过玩家uuid
+     * @param userUuid 
+     * @returns 
+     */
     static delEntityByUserUuid(userUuid: string) {
-        const entitys = ecs.ECSQuery.withComsBoth(PlayerComponents)
+        const entitys = ecs.ECSQuery.withComsBoth(PlayerComponent)
         for (const entity of entitys) {
-            const playerCom = entity.getComponent(PlayerComponents)
+            const playerCom = entity.getComponent(PlayerComponent)
             if (playerCom.playerId == userUuid) {
                 return this.delEntity(entity as BaseEntity)
             }
         }
     }
-
+    /**
+     * 移除指定layer上所有实体
+     * @param layerId 层级id
+     */
     static delEntityByLayerId(layerId: Layer.EnumLayerId) {
         const layer = LayerManager.getLayerById(layerId)
         const entitys = layer.children
@@ -51,7 +58,10 @@ export class EntityManager {
             this.delEntity(entity as BaseEntity)
         }
     }
-
+    /**
+     * 移除指定类型的实体，通过实体配置指定
+     * @param entityConfig 实体配置
+     */
     static delEntityByEntityConfig(entityConfig: Entity.TypeEntityConfig) {
         const ruledEntitys = ecs.ECSQuery.withComsBothOnly(...entityConfig.components)
         for (const entity of ruledEntitys) {

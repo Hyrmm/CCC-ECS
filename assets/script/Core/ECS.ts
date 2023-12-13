@@ -4,21 +4,16 @@ import { Component, Node, NodePool } from "cc"
 
 
 export module ecs {
-    type comName = string
-    type name2ECSComponent<T> = Map<string, ctor<T>>
-
     type systemPool = Array<System>
     type entityPool = Array<Entity>
-
-    type ctor<T = unknown> = new (...args: any[]) => T;
+    type ctor<T = unknown> = new (...args: any[]) => T
 
     window['ecs'] = ecs
 
     export const systemPool: systemPool = []
     export const entityPool: entityPool = []
     export const entityPoolMap: Map<string, Entity> = new Map()
-
-    export const comName2EntityPool: Map<comName, entityPool> = new Map()
+    export const comName2EntityPool: Map<string, entityPool> = new Map()
 
     export class System {
         public priority: number
@@ -29,7 +24,6 @@ export module ecs {
 
     export class Entity extends Node {
         public entityId: number
-
         public ECSComponents: Array<ECSComponent> = []
         public name2ECSComponent: Map<string, ECSComponent> = new Map()
 
@@ -231,5 +225,6 @@ export module ecs {
 
 
 }
+
 
 
