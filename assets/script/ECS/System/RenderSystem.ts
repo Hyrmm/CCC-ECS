@@ -18,32 +18,22 @@ export class RenderSystem extends BaseSystem {
     }
 
     /**
-     * 渲染位置
+     * 渲染实体位置
      * @param entity 实体
      */
-    private renderPosition(entity: BaseEntity) {
+    private renderEntityPosition(entity: BaseEntity) {
         const positionComponent = entity.getCom(PositionComponent)
         entity.setPosition(positionComponent.position)
     }
 
 
     /**
-     * 玩家实体影子追踪(插值渲染)
+     * 渲染玩家实体
      */
     private renderPlayerEntitys(dt: number) {
         const playerEntitys = ecs.ECSQuery.withComsBoth(PlayerComponent)
         for (const entity of playerEntitys) {
-
-            const positionCom = entity.getCom(PositionComponent)
-            const curPos = positionCom.position
-            const curShadowPos = positionCom.shadowPosition
-            const offsetPos = new Vec3(curShadowPos.x - curPos.x, curShadowPos.y - curPos.y, 0)
-
-            if (offsetPos != Vec3.ZERO) {
-                const t = Math.ceil(dt * 1000) / (1000 / 60)
-                positionCom.position.add(new Vec3(t * offsetPos.x, t * offsetPos.y))
-            }
-            this.renderPosition(entity as BaseEntity)
+            this.renderEntityPosition(entity as BaseEntity)
         }
     }
 

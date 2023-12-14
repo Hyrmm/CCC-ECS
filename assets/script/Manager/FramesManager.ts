@@ -128,7 +128,7 @@ export class FramesManager {
             // 移动
             case Input.EnumInputTypeName.PlayerMove: {
                 const movementSystem = SystemManager.getSystem(MovementSystem)
-                movementSystem.updatePlayerPositon(inputs.playerMove)
+                movementSystem.updatePlayerShadowPositon(inputs.playerMove)
                 break
             }
             // 加入

@@ -1,4 +1,4 @@
-import { AssetManager, assetManager, SpriteFrame, Prefab, Asset } from "cc"
+import { assetManager, Prefab } from "cc"
 
 export class AssetsManager {
     static name2Bundles: Array<string> = ["prefeb", "resource"]
