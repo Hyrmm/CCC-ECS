@@ -1,6 +1,6 @@
 
 import { ecs } from "../../Core/ECS"
-import { _decorator, Component, Node } from 'cc'
+import { _decorator, Component, Node, Vec3 } from 'cc'
 import { BaseComponent } from "./Component"
 const { ccclass, property } = _decorator
 
@@ -9,6 +9,7 @@ const { ccclass, property } = _decorator
 export class InputComponent extends BaseComponent {
 
     public keyPresingCode: Array<number> = []
+    public predictPos: Vec3 = new Vec3(0, 0, 0)
 
     start() {
 

@@ -4,6 +4,7 @@ import { PositionComponent, InputComponent, PhysicalComponent, PlayerComponent }
 import { FramesManager } from "../../Manager/FramesManager"
 import { BaseSystem } from "./System"
 import { Input } from "../../Type"
+import { EntityManager } from "../../Manager/EntityManager"
 
 export class MovementSystem extends BaseSystem {
 
@@ -14,7 +15,7 @@ export class MovementSystem extends BaseSystem {
 
     /**
     * 针对有控制组件的实体更新位置
-    * @param dt 帧间隔(千分之毫秒)
+    * @param dt 帧间隔
     */
     public updateControllablePositon(dt: number) {
         const entitys = ecs.ECSQuery.withComsBoth(PositionComponent, PhysicalComponent, InputComponent)
@@ -23,7 +24,7 @@ export class MovementSystem extends BaseSystem {
             const velocityX = physicalCom.velocityX
             const velocityY = physicalCom.velocityY
 
-            const { directionX, directionY } = this.getEntityDirection(entity)
+            const { directionX, directionY } = EntityManager.getEntityDirection(entity)
 
             // 一旦有朝向说明有移动，向服务器同步操作
             if (directionX != 0 || directionY != 0) {
@@ -59,6 +60,7 @@ export class MovementSystem extends BaseSystem {
 
 
     }
+
     /**
     * 根据玩家实体影子位置，插值追逐影子
     * @param dt 帧刷新间隔
@@ -85,52 +87,6 @@ export class MovementSystem extends BaseSystem {
             }
         }
     }
-
-    /**
-    * 获取实体朝向
-    * @param entity 实体实例
-    */
-    private getEntityDirection(entity: ecs.Entity): { directionX: number, directionY: number } {
-
-        let directionX, directionY
-        const inputCom = entity.getCom(InputComponent)
-        const curPresingKeyCode = inputCom.keyPresingCode[inputCom.keyPresingCode.length - 1]
-
-        switch (curPresingKeyCode) {
-            case Input.EnumDirKeyCode.Up:
-                {
-                    directionX = 0
-                    directionY = 1
-                    break
-                }
-            case Input.EnumDirKeyCode.Down:
-                {
-                    directionX = 0
-                    directionY = -1
-                    break
-                }
-            case Input.EnumDirKeyCode.Left:
-                {
-                    directionX = -1
-                    directionY = 0
-                    break
-                }
-            case Input.EnumDirKeyCode.Right:
-                {
-                    directionX = 1
-                    directionY = 0
-                    break
-                }
-            default:
-                {
-                    directionX = 0
-                    directionY = 0
-                }
-        }
-
-        return { directionX, directionY }
-    }
-
 
     public update(dt?: number) {
         this.updateControllablePositon(dt)

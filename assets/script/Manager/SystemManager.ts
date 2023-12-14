@@ -1,4 +1,5 @@
 
+import { ecs } from "../Core/ECS"
 import { BaseSystem } from "../ECS/System/System"
 
 class SystemMap {
@@ -42,7 +43,7 @@ export class SystemManager {
     * @param systemCls system类
     */
     static registerSystem<T extends BaseSystem>(systemCls: ctor<T>): T {
-        const systemInstance = new systemCls
+        const systemInstance = ecs.System.registSystem(systemCls)
         this.systemMap.addInstance(systemCls.name, systemInstance)
         return systemInstance
     }

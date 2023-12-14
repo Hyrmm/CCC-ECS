@@ -4,8 +4,9 @@ import { LayerManager } from "../Manager/LayerManager"
 import { BaseEntity } from "../ECS/Entity/Entity"
 import { AssetsManager } from "./AssetsManager"
 import { PhysicalComponent } from "../ECS/Component/PhysicalComponent"
-import { Entity, Layer } from "../Type"
+import { Entity, Input, Layer } from "../Type"
 import { PlayerComponent } from "../ECS/Component/PlayerComponent"
+import { InputComponent } from "../ECS/Component/ECSComponent"
 
 
 
@@ -105,7 +106,50 @@ export class EntityManager {
 
 
 
+    /**
+    * 获取实体朝向
+    * @param entity 实体实例
+    */
+    static getEntityDirection(entity: ecs.Entity): { directionX: number, directionY: number } {
 
+        let directionX, directionY
+        const inputCom = entity.getCom(InputComponent)
+        const curPresingKeyCode = inputCom.keyPresingCode[inputCom.keyPresingCode.length - 1]
+
+        switch (curPresingKeyCode) {
+            case Input.EnumDirKeyCode.Up:
+                {
+                    directionX = 0
+                    directionY = 1
+                    break
+                }
+            case Input.EnumDirKeyCode.Down:
+                {
+                    directionX = 0
+                    directionY = -1
+                    break
+                }
+            case Input.EnumDirKeyCode.Left:
+                {
+                    directionX = -1
+                    directionY = 0
+                    break
+                }
+            case Input.EnumDirKeyCode.Right:
+                {
+                    directionX = 1
+                    directionY = 0
+                    break
+                }
+            default:
+                {
+                    directionX = 0
+                    directionY = 0
+                }
+        }
+
+        return { directionX, directionY }
+    }
 
 
 }

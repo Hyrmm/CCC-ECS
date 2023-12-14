@@ -40,6 +40,14 @@ export class RootSystem extends BaseSystem {
         return scheduleKey
     }
 
+    /**
+    * 删除以帧刷新为单位执行回调
+    * @param scheduleId 添加时返回的调度id
+    */
+    public delFramesSchedule(scheduleId: Symbol): Boolean {
+        return this.framesScheduleMap.delete(scheduleId)
+    }
+
     private executeSubSystem(dt: number) {
         let afterFilterSystemPool = ecs.systemPool
 
@@ -55,14 +63,6 @@ export class RootSystem extends BaseSystem {
         }
 
         this.executeFramesSchedule(dt)
-    }
-
-    /**
-    * 删除以帧刷新为单位执行回调
-    * @param scheduleId 添加时返回的调度id
-    */
-    public delFramesSchedule(scheduleId: Symbol): Boolean {
-        return this.framesScheduleMap.delete(scheduleId)
     }
 
     private executeFramesSchedule(dt: number) {
