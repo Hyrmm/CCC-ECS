@@ -38,7 +38,7 @@ export module ecs {
          * @returns 
          */
         static getSystem<T extends System>(systemCls: ctor<T>): T {
-
+            return systemName2InstantceMap.get(systemCls.name) as T
         }
 
         public priority: number
@@ -83,7 +83,6 @@ export module ecs {
                 const newEntityPool = comGroupEntityPool.filter((poolEntity) => poolEntity.entityId != entity.entityId)
                 comName2EntityPool.set(comName, newEntityPool)
             }
-
             entity.destroy()
         }
 
@@ -94,8 +93,7 @@ export module ecs {
         public addCom<T extends ECSComponent>(comCls: ctor<T>): void {
             if (this.name2ECSComponent.has(comCls['comName'])) return
 
-            const comInstance = this.addComponent(comCls)
-
+            const comInstance = new comCls()
             comInstance.entity = this
 
             this.ECSComponents.push(comInstance)
@@ -134,9 +132,6 @@ export module ecs {
             const comGroupEntityPool = comName2EntityPool.get(comCls['comName'])
             const newEntityPool = comGroupEntityPool.filter((entity) => entity.entityId != this.entityId)
             comName2EntityPool.set(comCls['comName'], newEntityPool)
-
-
-            delCom.destroy()
         }
 
         /**
@@ -151,13 +146,13 @@ export module ecs {
          * 实体上是否有该组件
          * @param comCls 组件类
         */
-        public hasCom(comCls: ctor<Component>): boolean {
+        public hasCom<T extends ECSComponent>(comCls: ctor<T>): boolean {
             return this.name2ECSComponent.has(comCls['comName'])
         }
 
     }
 
-    export class ECSComponent extends Component {
+    export class ECSComponent {
         static comName: string = ""
         public entity: Entity
     }

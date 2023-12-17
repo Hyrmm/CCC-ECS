@@ -1,8 +1,6 @@
 import { Vec3 } from "cc";
 import { ecs } from "../../Core/ECS"
-import { PlayerComponent } from "../Component/PlayerComponent";
-import { PositionComponent } from "../Component/PositionComponent"
-import { RenderComponent } from "../Component/RenderComponent"
+import { AnimateComponent, PlayerComponent, PositionComponent, RenderComponent } from "../Component/ECSComponent"
 import { BaseEntity } from "../Entity/Entity";
 import { BaseSystem } from "./System";
 
@@ -11,12 +9,6 @@ export class RenderSystem extends BaseSystem {
     public priority: number = 1
     public managedECSComponents = []
 
-
-
-    update(dt?: number): void {
-        this.renderPlayerEntitys(dt)
-    }
-
     /**
      * 渲染实体位置
      * @param entity 实体
@@ -24,6 +16,14 @@ export class RenderSystem extends BaseSystem {
     private renderEntityPosition(entity: BaseEntity) {
         const positionComponent = entity.getCom(PositionComponent)
         entity.setPosition(positionComponent.position)
+    }
+
+    /**
+     * 渲染实体帧动画
+     * @param entity 实体
+     */
+    private renderEntityFrameAnimate(entity: BaseEntity) {
+        const frameAnimateCom = entity.getCom(AnimateComponent)
     }
 
 
@@ -37,6 +37,9 @@ export class RenderSystem extends BaseSystem {
         }
     }
 
+    update(dt?: number): void {
+        this.renderPlayerEntitys(dt)
+    }
 
 }
 type ctor<T = unknown> = new (...args: any[]) => T;

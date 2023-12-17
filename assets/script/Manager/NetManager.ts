@@ -38,7 +38,7 @@ export class NetManager {
     }
 
     static doConnect() {
-        this.webSocket = new WebSocket("ws://172.16.40.61:8888")
+        this.webSocket = new WebSocket("ws://192.168.0.104:8888")
         this.webSocket.binaryType = "arraybuffer"
         const self = this
         this.webSocket.onopen = (ev) => {

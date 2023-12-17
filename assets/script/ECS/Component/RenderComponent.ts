@@ -6,12 +6,4 @@ const { ccclass, property } = _decorator
 @ecs.ECSDecorator.registerECSComName('RenderComponent')
 @ccclass('RenderComponent')
 export class RenderComponent extends BaseComponent {
-    start() {
-
-    }
-
-    update(deltaTime: number) {
-
-
-    }
 }

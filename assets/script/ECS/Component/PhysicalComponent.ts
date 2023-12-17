@@ -10,11 +10,5 @@ export class PhysicalComponent extends BaseComponent {
     public velocityX: number = 1
     public velocityY: number = 1
 
-    start() {
-        // 初始化速度
-    }
 
-    update(deltaTime: number) {
-
-    }
 }

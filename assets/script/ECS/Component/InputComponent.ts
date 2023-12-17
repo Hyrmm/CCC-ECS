@@ -11,11 +11,5 @@ export class InputComponent extends BaseComponent {
     public keyPresingCode: Array<number> = []
     public predictPos: Vec3 = new Vec3(0, 0, 0)
 
-    start() {
 
-    }
-
-    update(deltaTime: number) {
-
-    }
 }

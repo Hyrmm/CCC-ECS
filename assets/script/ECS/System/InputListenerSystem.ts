@@ -47,7 +47,7 @@ export class InputListenerSystem extends BaseSystem {
 
         const resultEntitys = ecs.ECSQuery.withCom(InputComponent)
         for (const entity of resultEntitys) {
-            const inputCom = entity.getComponent(InputComponent)
+            const inputCom = entity.getCom(InputComponent)
             inputCom.keyPresingCode = this.keyPresingCode
         }
     }

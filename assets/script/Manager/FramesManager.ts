@@ -145,7 +145,7 @@ export class FramesManager {
                         const config = entityConfig.otherPlayerEntityConfig
                         playerEntity = EntityManager.createEntity(config)
                     }
-                    playerEntity.getComponent(PlayerComponent).playerId = info.player.uuid
+                    playerEntity.getCom(PlayerComponent).playerId = info.player.uuid
                 }
                 break
             }

@@ -1,4 +1,4 @@
-import { Prefab, instantiate, NodePool, isValid } from "cc"
+import { Prefab, instantiate, NodePool, isValid, Texture2D, Node, Sprite } from "cc"
 import { ecs } from "../Core/ECS"
 import { LayerManager } from "../Manager/LayerManager"
 import { BaseEntity } from "../ECS/Entity/Entity"
@@ -6,7 +6,7 @@ import { AssetsManager } from "./AssetsManager"
 import { PhysicalComponent } from "../ECS/Component/PhysicalComponent"
 import { Entity, Input, Layer } from "../Type"
 import { PlayerComponent } from "../ECS/Component/PlayerComponent"
-import { InputComponent } from "../ECS/Component/ECSComponent"
+import { AnimateComponent, InputComponent } from "../ECS/Component/ECSComponent"
 
 
 
@@ -32,6 +32,21 @@ export class EntityManager {
     }
 
     static delEntity(entity: BaseEntity) {
+        const entityConfig = entity.config
+
+        // 帧动画手动创建SpriteFrame实现，需要手动释放纹理引用
+        if (entityConfig.frameAnimate) {
+            const frameAnimateCom = entity.getCom(AnimateComponent)
+            const frameAnimateSpriteNode = frameAnimateCom.frameAnimateSpriteNode
+            if (frameAnimateSpriteNode) {
+                AssetsManager.deleteEntityFrameSheetNode(frameAnimateSpriteNode)
+            }
+        }
+
+        if (entityConfig.prefebName) {
+            console.log(entity)
+        }
+
         ecs.Entity.deleteEntity(entity)
     }
     /**
@@ -42,7 +57,7 @@ export class EntityManager {
     static delEntityByUserUuid(userUuid: string) {
         const entitys = ecs.ECSQuery.withComsBoth(PlayerComponent)
         for (const entity of entitys) {
-            const playerCom = entity.getComponent(PlayerComponent)
+            const playerCom = entity.getCom(PlayerComponent)
             if (playerCom.playerId == userUuid) {
                 return this.delEntity(entity as BaseEntity)
             }
@@ -76,20 +91,42 @@ export class EntityManager {
      * @param entity 
      */
     static bindEntityConfig(entityConfig: Entity.TypeEntityConfig, entity: BaseEntity) {
+        entity.config = entityConfig
         // 速度
         if (entityConfig.velocity) {
-            const physicalCom = entity.getComponent(PhysicalComponent)
+            const physicalCom = entity.getCom(PhysicalComponent)
             physicalCom.velocityX = entityConfig.velocity[0]
             physicalCom.velocityY = entityConfig.velocity[1]
         }
 
         // 预制体
         if (entityConfig.prefebName) {
-            AssetsManager.getPrefeb(`entity/${entityConfig.prefebName}`, (prefebAssets: Prefab) => {
-                const prefebNode = instantiate(prefebAssets)
-                prefebNode.name = `entity/${entityConfig.prefebName}`
+            AssetsManager.createInstancePrefeb(`entity/${entityConfig.prefebName}`, (prefebNode: Node) => {
                 if (isValid(entity)) {
+                    prefebNode.name = `entityPrefeb-${entityConfig.prefebName}`
                     entity.addChild(prefebNode)
+                } else {
+                    prefebNode.destroy()
+                }
+            })
+        }
+
+        // 帧动画
+        if (entityConfig.frameAnimate) {
+            const frameSheetName = entityConfig.frameAnimate.frameAnimateSheetName
+            AssetsManager.createEntityFrameSheetNode(frameSheetName, (frameSheetNode: Node) => {
+                if (isValid(entity)) {
+                    // 挂载 动画组件数据
+                    const animateCom = entity.getCom(AnimateComponent)
+                    animateCom.isFrameSheetLoaded = true
+                    animateCom.frameSheetRectCnt = entityConfig.frameAnimate.frameSheetRectCnt
+                    animateCom.defaultAnimateName = entityConfig.frameAnimate.defaultAnimateName
+
+                    frameSheetNode.active = false
+                    entity.addChild(frameSheetNode)
+
+                } else {
+                    AssetsManager.deleteEntityFrameSheetNode(frameSheetNode)
                 }
             })
         }

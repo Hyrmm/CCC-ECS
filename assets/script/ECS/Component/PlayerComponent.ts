@@ -9,11 +9,4 @@ const { ccclass, property } = _decorator
 export class PlayerComponent extends BaseComponent {
     public playerId: string
 
-    start() {
-        
-    }
-
-    update(deltaTime: number) {
-
-    }
 }

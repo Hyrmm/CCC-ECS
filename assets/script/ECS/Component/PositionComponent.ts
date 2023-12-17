@@ -8,12 +8,4 @@ const { ccclass, property } = _decorator
 export class PositionComponent extends BaseComponent {
     public position: Vec3 = new Vec3(0, 0, 0)
     public shadowPosition: Vec3 = new Vec3(0, 0, 0)
-
-    start() {
-
-    }
-
-    update(deltaTime: number) {
-
-    }
 }

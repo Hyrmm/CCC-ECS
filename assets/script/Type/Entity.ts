@@ -1,6 +1,13 @@
 import { ecs } from "../Core/ECS"
-import { Layer } from "."
+import { Layer } from "./index"
 
+
+export type TypeFrameAnimate = {
+    defaultAnimateName: string
+    frameSheetRectCnt: [number, number]
+    frameAnimateSheetName: string
+    animatesMap: Map<string, [number, number]>
+}
 
 export type TypeEntityConfig = {
     name: string
@@ -9,6 +16,7 @@ export type TypeEntityConfig = {
     moveClipsName?: string
     prefebName?: string
     velocity?: [number, number]
+    frameAnimate?: TypeFrameAnimate
 }
 
 
