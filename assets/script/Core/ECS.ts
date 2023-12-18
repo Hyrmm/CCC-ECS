@@ -1,8 +1,6 @@
 import { Component, Node, NodePool } from "cc"
 
 
-
-var a = 1
 export module ecs {
     type systemPool = Array<System>
     type entityPool = Array<Entity>
@@ -20,7 +18,6 @@ export module ecs {
         /**
          * 注册系统
          * @param systemCls 基于ecs.system的泛型类(构造函数)
-         * @returns 
          */
         static registSystem<T extends System>(systemCls: ctor<T>): T {
             if (systemName2InstantceMap.has(systemCls.name)) {
@@ -35,11 +32,18 @@ export module ecs {
         /**
          * 获取系统实例
          * @param systemCls 基于ecs.system的泛型类(构造函数)
-         * @returns 
          */
         static getSystem<T extends System>(systemCls: ctor<T>): T {
             return systemName2InstantceMap.get(systemCls.name) as T
         }
+
+        /**
+        * 获取所有系统实例
+        */
+        static getAllSystems(): Array<System> {
+            return [...systemName2InstantceMap.values()]
+        }
+
 
         public priority: number
         protected lastUpdateTime: number

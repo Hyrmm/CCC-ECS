@@ -1,10 +1,11 @@
 import { ecs } from "../../Core/ECS"
-import { Vec3 } from "cc"
+import { Vec3, Rect } from "cc"
 import { PositionComponent, InputComponent, PhysicalComponent, PlayerComponent } from "../Component/ECSComponent"
 import { FramesManager } from "../../Manager/FramesManager"
 import { BaseSystem } from "./System"
 import { Input } from "../../Type"
 import { EntityManager } from "../../Manager/EntityManager"
+import { BaseEntity } from "../Entity/Entity"
 
 export class MovementSystem extends BaseSystem {
 
@@ -14,17 +15,17 @@ export class MovementSystem extends BaseSystem {
 
 
     /**
-    * 针对有控制组件的实体更新位置
+    * 检查可控制实体的实体提交输入
     * @param dt 帧间隔
     */
-    public updateControllablePositon(dt: number) {
+    public updatecontrollableEntityInput(dt: number) {
         const entitys = ecs.ECSQuery.withComsBoth(PositionComponent, PhysicalComponent, InputComponent)
         for (const entity of entitys) {
             const physicalCom = entity.getCom(PhysicalComponent)
             const velocityX = physicalCom.velocityX
             const velocityY = physicalCom.velocityY
 
-            const { directionX, directionY } = EntityManager.getEntityDirection(entity)
+            const { directionX, directionY } = EntityManager.getEntityDirection(entity as BaseEntity)
 
             // 一旦有朝向说明有移动，向服务器同步操作
             if (directionX != 0 || directionY != 0) {
@@ -33,12 +34,11 @@ export class MovementSystem extends BaseSystem {
 
         }
     }
-
     /**
     * 针对性更新玩家实体影子位置
     * @param playerMoveArr 移动数据
     */
-    public updatePlayerShadowPositon(playerMoveArr: Array<Input.TypePlayerMove>) {
+    public updatePlayerShadowPos(playerMoveArr: Array<Input.TypePlayerMove>) {
 
         // 移动数据结构处理
         const playerId2PlayerMoveMap: Map<string, Input.TypePlayerMove> = new Map()
@@ -62,10 +62,10 @@ export class MovementSystem extends BaseSystem {
     }
 
     /**
-    * 根据玩家实体影子位置，插值追逐影子
+    * 根据玩家实体影子位置，插值渲染位置从而追逐影子
     * @param dt 帧刷新间隔
     */
-    public updatePlayerInterpolationPositon(dt) {
+    public updatePlayerInterpolationPos(dt) {
         const playerEntitys = ecs.ECSQuery.withComsBoth(PlayerComponent)
 
         // 插值增量系数取值区间在(0,1),可以将dt(每帧间隔时间)作为其中参数动态计算插值增量，可使得在不同刷新率下，插值的都是平滑的
@@ -89,8 +89,7 @@ export class MovementSystem extends BaseSystem {
     }
 
     public update(dt?: number) {
-        this.updateControllablePositon(dt)
-        this.updatePlayerInterpolationPositon(dt)
+        this.updatePlayerInterpolationPos(dt)
+        this.updatecontrollableEntityInput(dt)
     }
 }
-type ctor<T = unknown> = new (...args: any[]) => T;

@@ -35,29 +35,29 @@ export class AssetsManager {
         })
     }
 
-    static createEntityFrameSheetNode(frameSheetName: string, loadFinishCb: (frameSheetNode: Node) => void) {
-        const bundle = assetManager.getBundle("resource")
-        bundle.load(`entity/frameAnimate/${frameSheetName}/texture`, Texture2D, (err, textureAsssets: Texture2D) => {
-            if (err) {
-                console.error(`[EntityManager]:加载 ${frameSheetName} 帧动画纹理失败`)
-            }
-            const resultNode = new Node("sp_frameAnimate")
-            const spriteFrame = new SpriteFrame()
-            textureAsssets.addRef()
-            spriteFrame.texture = textureAsssets
-            resultNode.addComponent(Sprite).spriteFrame = spriteFrame
-            loadFinishCb(resultNode)
-        })
-    }
+    // static createEntityFrameSheetNode(frameSheetName: string, loadFinishCb: (frameSheetNode: Node) => void) {
+    //     const bundle = assetManager.getBundle("resource")
+    //     bundle.load(`entity/frameAnimate/${frameSheetName}/texture`, Texture2D, (err, textureAsssets: Texture2D) => {
+    //         if (err) {
+    //             console.error(`[EntityManager]:加载 ${frameSheetName} 帧动画纹理失败`)
+    //         }
+    //         const resultNode = new Node("sp_frameAnimate")
+    //         const spriteFrame = new SpriteFrame()
+    //         textureAsssets.addRef()
+    //         spriteFrame.texture = textureAsssets
+    //         resultNode.addComponent(Sprite).spriteFrame = spriteFrame
+    //         loadFinishCb(resultNode)
+    //     })
+    // }
 
-    static deleteEntityFrameSheetNode(node: Node) {
-        const spriteCom = node.getComponent(Sprite)
-        if (spriteCom.spriteFrame) {
-            spriteCom.spriteFrame.texture.decRef()
-        }
-        spriteCom.spriteFrame = null
-        node.destroy()
-    }
+    // static deleteEntityFrameSheetNode(node: Node) {
+    //     const spriteCom = node.getComponent(Sprite)
+    //     if (spriteCom.spriteFrame) {
+    //         spriteCom.spriteFrame.texture.decRef()
+    //     }
+    //     spriteCom.spriteFrame = null
+    //     node.destroy()
+    // }
 
 
 

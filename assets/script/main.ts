@@ -31,7 +31,6 @@ export class Main extends Component {
     protected onLoad(): void {
         this.initAssetsManager(() => {
             this.initSystemManager()
-            this.initRootSystem()
             this.initNetManager()
             this.initModelsManager()
             this.initFramesManager()
@@ -55,17 +54,10 @@ export class Main extends Component {
 
     //** 系统管理器初始化 */
     private initSystemManager() {
-        this.rootSystem = SystemManager.registerSystem(RootSystem)
-        this.renderSystem = SystemManager.registerSystem(RenderSystem)
-        this.movementSystem = SystemManager.registerSystem(MovementSystem)
-        this.inputListenerSystem = SystemManager.registerSystem(InputListenerSystem)
-    }
-
-    //** 根系统初始化 */
-    private initRootSystem() {
-        this.rootSystem.addSystem(this.renderSystem)
-        this.rootSystem.addSystem(this.movementSystem)
-        this.rootSystem.addSystem(this.inputListenerSystem)
+        this.rootSystem = SystemManager.registSystem(RootSystem)
+        this.renderSystem = SystemManager.registSystem(RenderSystem)
+        this.movementSystem = SystemManager.registSystem(MovementSystem)
+        this.inputListenerSystem = SystemManager.registSystem(InputListenerSystem)
     }
 
     //** 网络管理器初始化 */

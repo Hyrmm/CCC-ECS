@@ -33,20 +33,6 @@ export class EntityManager {
 
     static delEntity(entity: BaseEntity) {
         const entityConfig = entity.config
-
-        // 帧动画手动创建SpriteFrame实现，需要手动释放纹理引用
-        if (entityConfig.frameAnimate) {
-            const frameAnimateCom = entity.getCom(AnimateComponent)
-            const frameAnimateSpriteNode = frameAnimateCom.frameAnimateSpriteNode
-            if (frameAnimateSpriteNode) {
-                AssetsManager.deleteEntityFrameSheetNode(frameAnimateSpriteNode)
-            }
-        }
-
-        if (entityConfig.prefebName) {
-            console.log(entity)
-        }
-
         ecs.Entity.deleteEntity(entity)
     }
     /**
@@ -102,31 +88,24 @@ export class EntityManager {
         // 预制体
         if (entityConfig.prefebName) {
             AssetsManager.createInstancePrefeb(`entity/${entityConfig.prefebName}`, (prefebNode: Node) => {
+                // 实体
                 if (isValid(entity)) {
                     prefebNode.name = `entityPrefeb-${entityConfig.prefebName}`
                     entity.addChild(prefebNode)
                 } else {
                     prefebNode.destroy()
                 }
-            })
-        }
 
-        // 帧动画
-        if (entityConfig.frameAnimate) {
-            const frameSheetName = entityConfig.frameAnimate.frameAnimateSheetName
-            AssetsManager.createEntityFrameSheetNode(frameSheetName, (frameSheetNode: Node) => {
-                if (isValid(entity)) {
-                    // 挂载 动画组件数据
+                // 帧动画(帧动画预先在实体预制体上挂载好)
+                if (isValid(entity) && entityConfig.frameAnimate) {
+                    const frameSheetName = entityConfig.frameAnimate.frameAnimateSheetName
                     const animateCom = entity.getCom(AnimateComponent)
                     animateCom.isFrameSheetLoaded = true
+                    animateCom.animatesMap = entityConfig.frameAnimate.animatesMap
                     animateCom.frameSheetRectCnt = entityConfig.frameAnimate.frameSheetRectCnt
                     animateCom.defaultAnimateName = entityConfig.frameAnimate.defaultAnimateName
-
-                    frameSheetNode.active = false
-                    entity.addChild(frameSheetNode)
-
-                } else {
-                    AssetsManager.deleteEntityFrameSheetNode(frameSheetNode)
+                    animateCom.frameAnimateSpriteNode = prefebNode.getChildByName("sp_frameAnimate")
+                    animateCom.playAnimate(animateCom.defaultAnimateName)
                 }
             })
         }

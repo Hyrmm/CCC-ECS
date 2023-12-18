@@ -31,7 +31,7 @@ export class RenderSystem extends BaseSystem {
      * 渲染玩家实体
      */
     private renderPlayerEntitys(dt: number) {
-        const playerEntitys = ecs.ECSQuery.withComsBoth(PlayerComponent)
+        const playerEntitys = ecs.ECSQuery.withComsBoth(PlayerComponent, RenderComponent)
         for (const entity of playerEntitys) {
             this.renderEntityPosition(entity as BaseEntity)
         }

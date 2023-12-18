@@ -2,11 +2,18 @@ import { ecs } from "../Core/ECS"
 import { Layer } from "./index"
 
 
+export type TypeAnimate = {
+    duraction: number
+    frameRange: [number, number]
+}
+
 export type TypeFrameAnimate = {
+    playOnLoad: boolean
+    animatesMap: Map<string, TypeAnimate>
     defaultAnimateName: string
+
     frameSheetRectCnt: [number, number]
     frameAnimateSheetName: string
-    animatesMap: Map<string, [number, number]>
 }
 
 export type TypeEntityConfig = {

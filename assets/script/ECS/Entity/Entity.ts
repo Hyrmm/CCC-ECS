@@ -11,25 +11,27 @@ export class BaseEntity extends ecs.Entity {
 
 
 
+export const allFrameAnimatesMap: Map<string, Entity.TypeFrameAnimate> = new Map()
 
-const allFrameAnimatesMap: Map<string, Entity.TypeFrameAnimate> = new Map()
+export const douxAnimatesMap: Map<string, Entity.TypeAnimate> = new Map()
+douxAnimatesMap.set("idle", { duraction: 0.1, frameRange: [0, 4] })
+douxAnimatesMap.set("run", { duraction: 0.1, frameRange: [5, 27] })
+allFrameAnimatesMap.set("doux", { playOnLoad: true, frameAnimateSheetName: "doux", frameSheetRectCnt: [24, 1], defaultAnimateName: "idle", animatesMap: douxAnimatesMap })
 
+export const mortAnimatesMap: Map<string, Entity.TypeAnimate> = new Map()
+mortAnimatesMap.set("idle", { duraction: 0.1, frameRange: [0, 4] })
+mortAnimatesMap.set("run", { duraction: 0.1, frameRange: [5, 27] })
+allFrameAnimatesMap.set("mort", { playOnLoad: true, frameAnimateSheetName: "mort", frameSheetRectCnt: [24, 1], defaultAnimateName: "idle", animatesMap: mortAnimatesMap })
 
+export const tardAnimatesMap: Map<string, Entity.TypeAnimate> = new Map()
+tardAnimatesMap.set("idle", { duraction: 0.1, frameRange: [0, 4] })
+tardAnimatesMap.set("run", { duraction: 0.1, frameRange: [5, 27] })
+allFrameAnimatesMap.set("tard", { playOnLoad: true, frameAnimateSheetName: "tard", frameSheetRectCnt: [24, 1], defaultAnimateName: "idle", animatesMap: tardAnimatesMap })
 
-
-
-
-const douxAnimatesMap: Map<string, [number, number]> = new Map().set("idle", [0, 5]).set("run", [5, 27])
-allFrameAnimatesMap.set("doux", { frameAnimateSheetName: "doux", frameSheetRectCnt: [24, 1], defaultAnimateName: "idle", animatesMap: douxAnimatesMap })
-
-const mortAnimatesMap: Map<string, [number, number]> = new Map().set("idle", [0, 5]).set("run", [5, 27])
-allFrameAnimatesMap.set("mort", { frameAnimateSheetName: "mort", frameSheetRectCnt: [24, 1], defaultAnimateName: "idle", animatesMap: mortAnimatesMap })
-
-const tardAnimatesMap: Map<string, [number, number]> = new Map().set("idle", [0, 5]).set("run", [5, 27])
-allFrameAnimatesMap.set("tard", { frameAnimateSheetName: "tard", frameSheetRectCnt: [24, 1], defaultAnimateName: "idle", animatesMap: tardAnimatesMap })
-
-const vitaAnimatesMap: Map<string, [number, number]> = new Map().set("idle", [0, 5]).set("run", [5, 27])
-allFrameAnimatesMap.set("vita", { frameAnimateSheetName: "vita", frameSheetRectCnt: [24, 1], defaultAnimateName: "idle", animatesMap: vitaAnimatesMap })
+export const vitaAnimatesMap: Map<string, Entity.TypeAnimate> = new Map()
+vitaAnimatesMap.set("idle", { duraction: 0.1, frameRange: [0, 4] })
+vitaAnimatesMap.set("run", { duraction: 0.1, frameRange: [5, 27] })
+allFrameAnimatesMap.set("vita", { playOnLoad: true, frameAnimateSheetName: "vita", frameSheetRectCnt: [24, 1], defaultAnimateName: "idle", animatesMap: vitaAnimatesMap })
 
 
 export const entityConfig: { [key: string]: Entity.TypeEntityConfig } = {
