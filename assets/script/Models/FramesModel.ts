@@ -74,7 +74,7 @@ export class FramesModel extends BaseModel {
     private onSocketDisconnect() {
         // 停止同步帧、清理实体信息
         FramesManager.stopSyncFrames()
-        EntityManager.delEntityByEntityConfig(entityConfig.playerEntity)
+        EntityManager.delEntityByEntityConfig(entityConfig.playerEntityConfig)
         this.resetDatabase()
     }
 
