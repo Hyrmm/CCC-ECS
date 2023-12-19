@@ -1,6 +1,6 @@
 import { ecs } from "../../Core/ECS"
 import { Vec3, Rect } from "cc"
-import { PositionComponent, InputComponent, PhysicalComponent, PlayerComponent } from "../Component/ECSComponent"
+import { PositionComponent, InputComponent, PhysicalComponent, PlayerComponent, RenderComponent } from "../Component/ECSComponent"
 import { FramesManager } from "../../Manager/FramesManager"
 import { BaseSystem } from "./System"
 import { Input } from "../../Type"
@@ -52,8 +52,8 @@ export class MovementSystem extends BaseSystem {
             const positionCom = entity.getCom(PositionComponent)
             const playerMoveData = playerId2PlayerMoveMap.get(playerCom.playerId)
             if (playerMoveData) {
-                const posX = (playerMoveData.dt * playerMoveData.velocityX) / 5
-                const posY = (playerMoveData.dt * playerMoveData.velocityY) / 5
+                const posX = (playerMoveData.dt * playerMoveData.velocityX) / 8
+                const posY = (playerMoveData.dt * playerMoveData.velocityY) / 8
                 positionCom.shadowPosition.add(new Vec3(posX, posY, 0))
             }
         }
@@ -66,12 +66,12 @@ export class MovementSystem extends BaseSystem {
     * @param dt 帧刷新间隔
     */
     public updatePlayerInterpolationPos(dt) {
-        const playerEntitys = ecs.ECSQuery.withComsBoth(PlayerComponent)
+        const playerEntitys = ecs.ECSQuery.withComsBoth(PlayerComponent, PositionComponent, RenderComponent)
 
         // 插值增量系数取值区间在(0,1),可以将dt(每帧间隔时间)作为其中参数动态计算插值增量，可使得在不同刷新率下，插值的都是平滑的
         // FPS/dt=> 30hz/34ms 60hz/17ms 120hz/9ms 144hz/7ms
         // 存在特殊情况，卡顿时dt间隔会别的非常大，可能导致delta超出区间（0，1），此时时delta等于1
-        const delta = Math.min((dt * 1000) / 180, 1)
+        const delta = Math.min((dt * 1000) / 300, 1)
         for (const entity of playerEntitys) {
             const positionCom = entity.getCom(PositionComponent)
 

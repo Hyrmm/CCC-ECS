@@ -1,4 +1,4 @@
-import { assetManager, Prefab, SpriteFrame, Texture2D, Node, Sprite, instantiate } from "cc"
+import { assetManager, Prefab, SpriteFrame, Texture2D, Node, Sprite, instantiate, Asset } from "cc"
 
 export class AssetsManager {
     static name2Bundles: Array<string> = ["prefeb", "resource"]
@@ -22,42 +22,37 @@ export class AssetsManager {
         });
     }
 
-    static createInstancePrefeb(prefabPath, loadFinishCb) {
+    static createInstancePrefeb(prefabPath, loadFinishCb: (resultNode: Node, inUseCb: (isUseAsste: boolean) => void) => void) {
         const bundle = assetManager.getBundle("prefeb")
-        bundle.load(prefabPath, Prefab, (err, prefebAssets: Prefab) => {
+        bundle.load(prefabPath, Prefab, (err, prefebAsset: Prefab) => {
             if (err) {
-                console.error(`[EntityManager]:加载 ${prefabPath} 预制体失败`)
+                console.error(`[AssetsManager]:加载 ${prefabPath} 预制体失败`)
             }
-            prefebAssets.addRef()
-            const resultNode = instantiate(prefebAssets)
-
-            loadFinishCb(resultNode)
+            const resultNode = instantiate(prefebAsset)
+            loadFinishCb(resultNode, this.genAssetsInUseCb(prefebAsset))
         })
     }
 
-    // static createEntityFrameSheetNode(frameSheetName: string, loadFinishCb: (frameSheetNode: Node) => void) {
-    //     const bundle = assetManager.getBundle("resource")
-    //     bundle.load(`entity/frameAnimate/${frameSheetName}/texture`, Texture2D, (err, textureAsssets: Texture2D) => {
-    //         if (err) {
-    //             console.error(`[EntityManager]:加载 ${frameSheetName} 帧动画纹理失败`)
-    //         }
-    //         const resultNode = new Node("sp_frameAnimate")
-    //         const spriteFrame = new SpriteFrame()
-    //         textureAsssets.addRef()
-    //         spriteFrame.texture = textureAsssets
-    //         resultNode.addComponent(Sprite).spriteFrame = spriteFrame
-    //         loadFinishCb(resultNode)
-    //     })
-    // }
 
-    // static deleteEntityFrameSheetNode(node: Node) {
-    //     const spriteCom = node.getComponent(Sprite)
-    //     if (spriteCom.spriteFrame) {
-    //         spriteCom.spriteFrame.texture.decRef()
-    //     }
-    //     spriteCom.spriteFrame = null
-    //     node.destroy()
-    // }
+    static genAssetsInUseCb(asset: Asset) {
+        const callBack = (isUseAsset: boolean) => {
+            if (isUseAsset) this.assetAddRefsCnt(asset)
+        }
+        return callBack
+    }
+
+
+
+    static assetDeRefsCnt(asset: Asset) {
+        console.log(`[AssetsManager]:deRef`, asset)
+        asset.decRef()
+    }
+
+    static assetAddRefsCnt(asset: Asset) {
+        console.log(`[AssetsManager]:addRef`, asset)
+        asset.addRef()
+    }
+
 
 
 

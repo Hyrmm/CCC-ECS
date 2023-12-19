@@ -58,6 +58,9 @@ export class Main extends Component {
         this.renderSystem = SystemManager.registSystem(RenderSystem)
         this.movementSystem = SystemManager.registSystem(MovementSystem)
         this.inputListenerSystem = SystemManager.registSystem(InputListenerSystem)
+
+        this.rootSystem.mainSceneCom = this
+
     }
 
     //** 网络管理器初始化 */

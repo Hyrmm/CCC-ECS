@@ -9,6 +9,7 @@ import { UserInfoModel } from "../Models/UserInfoModel";
 import { BaseEntity, entityConfig } from "../ECS/Entity/Entity";
 import { EntityManager } from "./EntityManager";
 import { PlayerComponent } from "../ECS/Component/PlayerComponent";
+import { InputComponent } from "../ECS/Component/InputComponent";
 
 export class FramesManager {
 
@@ -136,13 +137,12 @@ export class FramesManager {
                 const userUuid = ModelsManager.getModel(UserInfoModel).userUuid
                 for (const info of inputs.playerJoin) {
                     let playerEntity: BaseEntity
+                    const config = entityConfig.playerEntityConfig
                     if (info.player.uuid == userUuid) {
                         // 自己本人
-                        const config = entityConfig.selfPlayerEntityConfig
-                        playerEntity = EntityManager.createEntity(config)
+                        playerEntity = EntityManager.createEntity(config, [InputComponent])
                     } else {
                         // 其他玩家
-                        const config = entityConfig.otherPlayerEntityConfig
                         playerEntity = EntityManager.createEntity(config)
                     }
                     playerEntity.getCom(PlayerComponent).playerId = info.player.uuid

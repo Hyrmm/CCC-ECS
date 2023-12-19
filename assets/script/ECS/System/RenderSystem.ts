@@ -18,6 +18,10 @@ export class RenderSystem extends BaseSystem {
         entity.setPosition(positionComponent.position)
     }
 
+    private renderEntityDirection(entity: BaseEntity) {
+        
+    }
+
     /**
      * 渲染实体帧动画
      * @param entity 实体

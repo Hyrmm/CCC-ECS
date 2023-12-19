@@ -2,6 +2,8 @@ import { ecs } from "../../Core/ECS"
 import { _decorator, Component, Node, Vec3, Sprite, log, SpriteFrame, UITransform } from 'cc'
 import { BaseComponent } from "./Component"
 import { Entity } from "../../Type"
+import { SystemManager } from "../../Manager/SystemManager"
+import { RootSystem } from "../System/RootSystem"
 const { ccclass, property } = _decorator
 
 @ecs.ECSDecorator.registerECSComName('AnimateComponent')
@@ -10,7 +12,7 @@ export class AnimateComponent extends BaseComponent {
     private isPlaying: boolean = false
     private curPlayingFrame: number = 0
     private curPlayingAnimateName: string = "default"
-    private playingInterval: number
+    private playingSchedule: Symbol
 
     private perFrameW: number = 0
     private perFrameH: number = 0
@@ -35,8 +37,8 @@ export class AnimateComponent extends BaseComponent {
             return console.error(`帧数动画${this.frameSheetName}-${animateName}不存在`, this.animatesMap)
         }
 
-        if (this.playingInterval) {
-            clearInterval(this.playingInterval)
+        if (this.playingSchedule) {
+            SystemManager.getSystem(RootSystem).delGlobalSchedule(this.playingSchedule)
             this.frameAnimateSpriteNode.active = false
         }
 
@@ -46,23 +48,30 @@ export class AnimateComponent extends BaseComponent {
         const spriteCom = this.frameAnimateSpriteNode.getComponent(Sprite)
         this.perFrameW = spriteCom.spriteFrame.texture.width / this.frameSheetRectCnt[0]
         this.perFrameH = spriteCom.spriteFrame.texture.height / this.frameSheetRectCnt[1]
+        this.frameAnimateSpriteNode.getComponent(UITransform).setContentSize(this.perFrameW, this.perFrameH)
 
-        setInterval(this.run.bind(this, animateName), 100)
+        spriteCom.spriteFrame.rect.width = this.perFrameW
+        spriteCom.spriteFrame.rect.height = this.perFrameH
+        spriteCom.spriteFrame.rect.x = 0
+        spriteCom.spriteFrame.rect.y = 0
+
+        this.run()
+        this.playingSchedule = SystemManager.getSystem(RootSystem).addGlobalSchedule(this.run, animateDuration, this)
     }
 
-    private run(animateName: string) {
-        this.frameAnimateSpriteNode.getComponent(UITransform).setContentSize(this.perFrameW, this.perFrameH)
-        const spriteCom = this.frameAnimateSpriteNode.getComponent(Sprite)
-        const animateInfo = this.animatesMap.get(animateName)
-        const animateDuration = animateInfo.duraction
+    public clearAnimate() {
+        if (this.playingSchedule) {
+            SystemManager.getSystem(RootSystem).delGlobalSchedule(this.playingSchedule)
+        }
+    }
+
+    private run() {
+        if (!this.frameAnimateSpriteNode.active) this.frameAnimateSpriteNode.active = true
+
+        const animateInfo = this.animatesMap.get(this.curPlayingAnimateName)
         const animateFrameRange = animateInfo.frameRange
 
-        this.updateRect()
-        this.calculateUV(spriteCom.spriteFrame)
-
-        if ((spriteCom as any)._assembler) {
-            (spriteCom as any)._assembler.updateUVs(spriteCom.spriteFrame)
-        }
+        this.updateFrame()
 
         if (this.curPlayingFrame == animateFrameRange[1]) {
             this.curPlayingFrame = animateFrameRange[0]
@@ -72,27 +81,22 @@ export class AnimateComponent extends BaseComponent {
 
     }
 
-    private updateRect() {
-        // 核心思想依照当前帧数，和固定的纹理行列数、单帧的宽高计算出对应rect,继而对计算出顶点数据
+    private updateFrame() {
+        /** 核心思想依照当前帧数，和固定的纹理行列数、单帧的宽高计算出对应rect,继而对计算出顶点数据 */
+
+        // 更新rect
         const animateSpriteCom = this.frameAnimateSpriteNode.getComponent(Sprite)
         const animateSpriteFrame = animateSpriteCom.spriteFrame
-        animateSpriteFrame.rect.x = this.curPlayingFrame * this.perFrameW
+        animateSpriteFrame.rect.x = (this.curPlayingFrame % this.frameSheetRectCnt[0]) * this.perFrameW
         animateSpriteFrame.rect.y = Math.floor(this.curPlayingFrame / (this.frameSheetRectCnt[1] * this.frameSheetRectCnt[0])) * this.perFrameH
-        animateSpriteFrame.rect.width = this.perFrameW
-        animateSpriteFrame.rect.width = this.perFrameH
-        if ((animateSpriteCom as any)._assembler) {
-            (animateSpriteCom as any)._assembler.updateUVs(animateSpriteCom)
-        }
-    }
 
-
-    private calculateUV(spriteFrame: SpriteFrame) {
-        const sf: any = spriteFrame
-        const rect = spriteFrame.rect;
-        const uv = spriteFrame.uv;
-        const tex = spriteFrame.texture;
-        const texw = tex.width;
-        const texh = tex.height;
+        // 更新顶点数据UV
+        const sf: any = animateSpriteFrame
+        const rect = animateSpriteFrame.rect
+        const uv = animateSpriteFrame.uv
+        const tex = animateSpriteFrame.texture
+        const texw = tex.width
+        const texh = tex.height
 
         if (sf._rotated) {
             const l = texw === 0 ? 0 : rect.x / texw;
@@ -223,5 +227,8 @@ export class AnimateComponent extends BaseComponent {
 
         }
 
+        // 更新着色器
+        // @ts-ignore
+        animateSpriteCom._assembler.updateUVs(animateSpriteCom)
     }
 }

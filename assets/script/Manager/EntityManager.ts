@@ -1,4 +1,4 @@
-import { Prefab, instantiate, NodePool, isValid, Texture2D, Node, Sprite } from "cc"
+import { Prefab, instantiate, NodePool, isValid, Texture2D, Node, Sprite, animation } from "cc"
 import { ecs } from "../Core/ECS"
 import { LayerManager } from "../Manager/LayerManager"
 import { BaseEntity } from "../ECS/Entity/Entity"
@@ -19,11 +19,16 @@ export class EntityManager {
     }
 
 
-    static createEntity(entityConfig: Entity.TypeEntityConfig) {
+    static createEntity(entityConfig: Entity.TypeEntityConfig, coms?: Array<ctor<ecs.ECSComponent>>) {
 
         const entity = ecs.Entity.createEntity(BaseEntity, entityConfig.name)
+        
+        if (coms) {
+            entity.addComs(entityConfig.components.concat(coms))
+        } else {
+            entity.addComs(entityConfig.components)
+        }
 
-        entity.addComs(entityConfig.components)
 
         this.bindEntityConfig(entityConfig, entity)
         this.setEntity2Layer(entityConfig.layerId, entity)
@@ -33,6 +38,20 @@ export class EntityManager {
 
     static delEntity(entity: BaseEntity) {
         const entityConfig = entity.config
+
+        if (entityConfig.prefebName) {
+            const prebefNode = entity.getChildByName(`entityPrefeb-${entityConfig.prefebName}`)
+            if (prebefNode) {
+                //@ts-ignore
+                AssetsManager.assetDeRefsCnt(prebefNode._prefab.asset)
+            }
+
+        }
+
+        if (entityConfig.frameAnimate) {
+            entity.getCom(AnimateComponent).clearAnimate()
+        }
+
         ecs.Entity.deleteEntity(entity)
     }
     /**
@@ -87,18 +106,19 @@ export class EntityManager {
 
         // 预制体
         if (entityConfig.prefebName) {
-            AssetsManager.createInstancePrefeb(`entity/${entityConfig.prefebName}`, (prefebNode: Node) => {
+            AssetsManager.createInstancePrefeb(`entity/${entityConfig.prefebName}`, (prefebNode: Node, inUseCb) => {
                 // 实体
                 if (isValid(entity)) {
                     prefebNode.name = `entityPrefeb-${entityConfig.prefebName}`
+                    inUseCb(true)
                     entity.addChild(prefebNode)
                 } else {
+                    inUseCb(false)
                     prefebNode.destroy()
                 }
 
-                // 帧动画(帧动画预先在实体预制体上挂载好)
+                // 帧动画(帧动画预先在实体预制体上挂载)
                 if (isValid(entity) && entityConfig.frameAnimate) {
-                    const frameSheetName = entityConfig.frameAnimate.frameAnimateSheetName
                     const animateCom = entity.getCom(AnimateComponent)
                     animateCom.isFrameSheetLoaded = true
                     animateCom.animatesMap = entityConfig.frameAnimate.animatesMap
@@ -169,6 +189,6 @@ export class EntityManager {
 
 
 }
-
+type ctor<T = unknown> = new (...args: any[]) => T
 
 
