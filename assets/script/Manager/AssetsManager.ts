@@ -44,12 +44,12 @@ export class AssetsManager {
 
 
     static assetDeRefsCnt(asset: Asset) {
-        console.log(`[AssetsManager]:deRef`, asset)
+        console.warn(`[AssetsManager]:deRef`, asset)
         asset.decRef()
     }
 
     static assetAddRefsCnt(asset: Asset) {
-        console.log(`[AssetsManager]:addRef`, asset)
+        console.warn(`[AssetsManager]:addRef`, asset)
         asset.addRef()
     }
 

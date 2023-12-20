@@ -101,6 +101,9 @@ export class Main extends Component {
         game.on(Game.EVENT_SHOW, () => {
             NetManager.reConnect()
         })
+        game.on(Game.EVENT_HIDE, () => {
+            
+        })
     }
 }
 

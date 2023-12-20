@@ -1,5 +1,5 @@
 import { ecs } from "../../Core/ECS"
-import { EventKeyboard, KeyCode } from "cc"
+import { EventKeyboard, KeyCode, input } from "cc"
 import { InputComponent } from "../Component/ECSComponent"
 import { BaseSystem } from "./System"
 
@@ -49,6 +49,14 @@ export class InputListenerSystem extends BaseSystem {
         for (const entity of resultEntitys) {
             const inputCom = entity.getCom(InputComponent)
             inputCom.keyPresingCode = this.keyPresingCode
+        }
+    }
+
+    public clearKeyboradPressing() {
+        const resultEntitys = ecs.ECSQuery.withCom(InputComponent)
+        for (const entity of resultEntitys) {
+            const inputCom = entity.getCom(InputComponent)
+            inputCom.keyPresingCode = []
         }
     }
 

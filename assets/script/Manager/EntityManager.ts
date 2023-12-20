@@ -7,6 +7,7 @@ import { PhysicalComponent } from "../ECS/Component/PhysicalComponent"
 import { Entity, Input, Layer } from "../Type"
 import { PlayerComponent } from "../ECS/Component/PlayerComponent"
 import { AnimateComponent, InputComponent } from "../ECS/Component/ECSComponent"
+import { BaseComponent } from "../ECS/Component/Component"
 
 
 
@@ -22,7 +23,7 @@ export class EntityManager {
     static createEntity(entityConfig: Entity.TypeEntityConfig, coms?: Array<ctor<ecs.ECSComponent>>) {
 
         const entity = ecs.Entity.createEntity(BaseEntity, entityConfig.name)
-        
+
         if (coms) {
             entity.addComs(entityConfig.components.concat(coms))
         } else {
@@ -89,6 +90,29 @@ export class EntityManager {
             this.delEntity(entity as BaseEntity)
         }
     }
+
+    /**
+    * 移除持有指定组件的实体
+    * @param com 实体类
+    */
+    static delEntityByCom(com: ctor<BaseComponent>) {
+        const ruledEntitys = ecs.ECSQuery.withCom(com)
+        for (const entity of ruledEntitys) {
+            this.delEntity(entity as BaseEntity)
+        }
+    }
+
+    /**
+    * 移除持有某些指定组件的实体
+    * @param com 实体类
+    */
+    static delEntityByComs(coms: Array<ctor<BaseComponent>>) {
+        const ruledEntitys = ecs.ECSQuery.withComs(...coms)
+        for (const entity of ruledEntitys) {
+            this.delEntity(entity as BaseEntity)
+        }
+    }
+
 
     /**
      * 绑定实体配置

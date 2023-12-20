@@ -8,6 +8,9 @@ export class BaseEntity extends ecs.Entity {
     public config: Entity.TypeEntityConfig
 }
 
+export class PlayerEntity extends BaseEntity {
+    public config: Entity.TypeEntityConfig = 
+}
 
 
 
@@ -45,5 +48,10 @@ export const entityConfig: { [key: string]: Entity.TypeEntityConfig } = {
     },
 }
 
+
+
+export const playerEntityConfig = {
+
+}
 
 type ctor<T = unknown> = new (...args: any[]) => T

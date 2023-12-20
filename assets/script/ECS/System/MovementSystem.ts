@@ -26,10 +26,10 @@ export class MovementSystem extends BaseSystem {
             const velocityY = physicalCom.velocityY
 
             const { directionX, directionY } = EntityManager.getEntityDirection(entity as BaseEntity)
-
+            const inputs = { playerMove: { dt: Math.ceil(dt * 1000), velocityX: velocityX * directionX, velocityY: velocityY * directionY } }
             // 一旦有朝向说明有移动，向服务器同步操作
             if (directionX != 0 || directionY != 0) {
-                FramesManager.applyInputs(Input.EnumInputTypeName.PlayerMove, { playerMove: { dt: Math.ceil(dt * 1000), velocityX: velocityX * directionX, velocityY: velocityY * directionY } })
+                FramesManager.applyInputs(Input.EnumInputTypeName.PlayerMove, inputs)
             }
 
         }

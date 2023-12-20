@@ -1,13 +1,12 @@
 import * as pb from "../Proto/proto";
 import { BaseModel } from "./BaseModel";
-import { EnumProtoId, EnumProtoName, protoName2Id } from "../Proto/protoMap";
+import { EnumProtoName, protoName2Id } from "../Proto/protoMap";
 import { ModelsManager } from "../Manager/ModelsManager";
 import { UserInfoModel } from "./UserInfoModel";
 import { EntityManager } from "../Manager/EntityManager";
-import { entityConfig } from "../ECS/Entity/Entity";
 import { LocalMsg, Input } from "../Type";
 import { FramesManager } from "../Manager/FramesManager";
-
+import { RenderComponent } from "../ECS/Component/RenderComponent";
 
 export class FramesModel extends BaseModel {
     private playerId: number = 10086
@@ -74,7 +73,7 @@ export class FramesModel extends BaseModel {
     private onSocketDisconnect() {
         // 停止同步帧、清理实体信息
         FramesManager.stopSyncFrames()
-        EntityManager.delEntityByEntityConfig(entityConfig.playerEntityConfig)
+        EntityManager.delEntityByCom(RenderComponent)
         this.resetDatabase()
     }
 
