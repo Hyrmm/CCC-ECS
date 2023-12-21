@@ -14,7 +14,7 @@ export enum EnumInputTypeName {
 }
 
 
-export type TypePlayer = { uuid: string, position: { v1: number, v2: number }, velocity: { v1: number, v2: number } }
+export type TypePlayer = { uuid: string, role: string, position: { v1: number, v2: number }, velocity: { v1: number, v2: number } }
 
 export type TypePlayerMove = { dt: number, velocityX?: number, velocityY?: number, playerId?: string }
 export type TypePlayerJoin = { player: TypePlayer }

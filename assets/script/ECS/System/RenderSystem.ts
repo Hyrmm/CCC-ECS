@@ -19,7 +19,7 @@ export class RenderSystem extends BaseSystem {
     }
 
     private renderEntityDirection(entity: BaseEntity) {
-        
+
     }
 
     /**
@@ -27,7 +27,15 @@ export class RenderSystem extends BaseSystem {
      * @param entity 实体
      */
     private renderEntityFrameAnimate(entity: BaseEntity) {
+        const positionCom = entity.getCom(PositionComponent)
         const frameAnimateCom = entity.getCom(AnimateComponent)
+        if (frameAnimateCom) {
+            if (Vec3.subtract(new Vec3(0, 0, 0), positionCom.shadowPosition, positionCom.position).length() <= 10) {
+                frameAnimateCom.playAnimate("idle")
+            } else {
+                frameAnimateCom.playAnimate("run")
+            }
+        }
     }
 
 
@@ -38,6 +46,7 @@ export class RenderSystem extends BaseSystem {
         const playerEntitys = ecs.ECSQuery.withComsBoth(PlayerComponent, RenderComponent)
         for (const entity of playerEntitys) {
             this.renderEntityPosition(entity as BaseEntity)
+            this.renderEntityFrameAnimate(entity as BaseEntity)
         }
     }
 

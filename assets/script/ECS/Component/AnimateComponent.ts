@@ -29,6 +29,8 @@ export class AnimateComponent extends BaseComponent {
 
 
     public playAnimate(animateName: string) {
+        if (this.curPlayingAnimateName == animateName) return
+
         const animateInfo = this.animatesMap.get(animateName)
         const animateDuration = animateInfo.duraction
         const animateFrameRange = animateInfo.frameRange
@@ -60,6 +62,9 @@ export class AnimateComponent extends BaseComponent {
     }
 
     public clearAnimate() {
+        this.isPlaying = false
+        this.curPlayingAnimateName = ""
+
         if (this.playingSchedule) {
             SystemManager.getSystem(RootSystem).delGlobalSchedule(this.playingSchedule)
         }
@@ -72,13 +77,17 @@ export class AnimateComponent extends BaseComponent {
         const animateFrameRange = animateInfo.frameRange
 
         this.updateFrame()
+        this.curPlayingFrame += 1
 
-        if (this.curPlayingFrame == animateFrameRange[1]) {
-            this.curPlayingFrame = animateFrameRange[0]
-        } else {
-            this.curPlayingFrame += 1
+        if (this.curPlayingFrame > animateFrameRange[1]) {
+
+            if (animateInfo.loop) {
+                this.curPlayingFrame = animateFrameRange[0]
+            } else {
+                this.clearAnimate()
+            }
+
         }
-
     }
 
     private updateFrame() {

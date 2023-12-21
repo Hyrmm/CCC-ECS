@@ -9,49 +9,71 @@ export class BaseEntity extends ecs.Entity {
 }
 
 export class PlayerEntity extends BaseEntity {
-    public config: Entity.TypeEntityConfig = 
+    public config: Entity.TypeEntityConfig
 }
 
 
 
-export const allFrameAnimatesMap: Map<string, Entity.TypeFrameAnimate> = new Map()
+const allFrameAnimatesMap: Map<string, Entity.TypeFrameAnimate> = new Map()
 
-export const douxAnimatesMap: Map<string, Entity.TypeAnimate> = new Map()
-douxAnimatesMap.set("idle", { duraction: 0.5, frameRange: [0, 4] })
-douxAnimatesMap.set("run", { duraction: 0.1, frameRange: [5, 27] })
+const douxAnimatesMap: Map<string, Entity.TypeAnimate> = new Map()
+douxAnimatesMap.set("idle", { loop: true, duraction: 0.1, frameRange: [0, 3] })
+douxAnimatesMap.set("run", { loop: false, duraction: 0.1, frameRange: [5, 10] })
 allFrameAnimatesMap.set("doux", { playOnLoad: true, frameAnimateSheetName: "doux", frameSheetRectCnt: [24, 1], defaultAnimateName: "idle", animatesMap: douxAnimatesMap })
 
-export const mortAnimatesMap: Map<string, Entity.TypeAnimate> = new Map()
-mortAnimatesMap.set("idle", { duraction: 0.5, frameRange: [0, 4] })
-mortAnimatesMap.set("run", { duraction: 0.1, frameRange: [5, 27] })
+const mortAnimatesMap: Map<string, Entity.TypeAnimate> = new Map()
+mortAnimatesMap.set("idle", { loop: true, duraction: 0.1, frameRange: [0, 3] })
+mortAnimatesMap.set("run", { loop: false, duraction: 0.1, frameRange: [5, 10] })
 allFrameAnimatesMap.set("mort", { playOnLoad: true, frameAnimateSheetName: "mort", frameSheetRectCnt: [24, 1], defaultAnimateName: "idle", animatesMap: mortAnimatesMap })
 
-export const tardAnimatesMap: Map<string, Entity.TypeAnimate> = new Map()
-tardAnimatesMap.set("idle", { duraction: 0.5, frameRange: [0, 4] })
-tardAnimatesMap.set("run", { duraction: 0.1, frameRange: [5, 27] })
+const tardAnimatesMap: Map<string, Entity.TypeAnimate> = new Map()
+tardAnimatesMap.set("idle", { loop: true, duraction: 0.1, frameRange: [0, 3] })
+tardAnimatesMap.set("run", { loop: false, duraction: 0.1, frameRange: [5, 10] })
 allFrameAnimatesMap.set("tard", { playOnLoad: true, frameAnimateSheetName: "tard", frameSheetRectCnt: [24, 1], defaultAnimateName: "idle", animatesMap: tardAnimatesMap })
 
-export const vitaAnimatesMap: Map<string, Entity.TypeAnimate> = new Map()
-vitaAnimatesMap.set("idle", { duraction: 0.5, frameRange: [0, 4] })
-vitaAnimatesMap.set("run", { duraction: 0.5, frameRange: [5, 27] })
+const vitaAnimatesMap: Map<string, Entity.TypeAnimate> = new Map()
+vitaAnimatesMap.set("idle", { loop: true, duraction: 0.1, frameRange: [0, 3] })
+vitaAnimatesMap.set("run", { loop: false, duraction: 0.1, frameRange: [5, 10] })
 allFrameAnimatesMap.set("vita", { playOnLoad: true, frameAnimateSheetName: "vita", frameSheetRectCnt: [24, 1], defaultAnimateName: "idle", animatesMap: vitaAnimatesMap })
 
 
-export const entityConfig: { [key: string]: Entity.TypeEntityConfig } = {
-    playerEntityConfig: {
-        name: "player",
-        layerId: Layer.EnumLayerId.PlayerLayer,
-        components: [PositionComponent, PhysicalComponent, RenderComponent, PlayerComponent, AnimateComponent],
-        velocity: [1, 1],
-        prefebName: "player",
-        frameAnimate: allFrameAnimatesMap.get("doux")
-    },
-}
 
+const entityConfig: Map<string, Entity.TypeEntityConfig> = new Map()
 
+entityConfig.set("playerDoux", {
+    name: "playerDoux",
+    layerId: Layer.EnumLayerId.PlayerLayer,
+    components: [PositionComponent, PhysicalComponent, RenderComponent, PlayerComponent, AnimateComponent],
+    velocity: [1, 1],
+    prefebName: "playerDoux",
+    frameAnimate: allFrameAnimatesMap.get("doux")
+},)
 
-export const playerEntityConfig = {
+entityConfig.set("playerMort", {
+    name: "playerMort",
+    layerId: Layer.EnumLayerId.PlayerLayer,
+    components: [PositionComponent, PhysicalComponent, RenderComponent, PlayerComponent, AnimateComponent],
+    velocity: [1, 1],
+    prefebName: "playerMort",
+    frameAnimate: allFrameAnimatesMap.get("mort")
+},)
 
-}
+entityConfig.set("playerTard", {
+    name: "playerTard",
+    layerId: Layer.EnumLayerId.PlayerLayer,
+    components: [PositionComponent, PhysicalComponent, RenderComponent, PlayerComponent, AnimateComponent],
+    velocity: [1, 1],
+    prefebName: "playerTard",
+    frameAnimate: allFrameAnimatesMap.get("tard")
+},)
 
-type ctor<T = unknown> = new (...args: any[]) => T
+entityConfig.set("playerVita", {
+    name: "playerVita",
+    layerId: Layer.EnumLayerId.PlayerLayer,
+    components: [PositionComponent, PhysicalComponent, RenderComponent, PlayerComponent, AnimateComponent],
+    velocity: [1, 1],
+    prefebName: "playerVita",
+    frameAnimate: allFrameAnimatesMap.get("vita")
+},)
+
+export { entityConfig }

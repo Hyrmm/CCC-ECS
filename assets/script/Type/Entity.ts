@@ -1,8 +1,10 @@
+import { Enum } from "cc"
 import { ecs } from "../Core/ECS"
 import { Layer } from "./index"
 
 
 export type TypeAnimate = {
+    loop: boolean
     duraction: number
     frameRange: [number, number]
 }
@@ -25,5 +27,11 @@ export type TypeEntityConfig = {
     frameAnimate?: TypeFrameAnimate
 }
 
+export enum EnumEntityAnimateName {
+    IdleTop = "idleTop",
+    IdleLeft = "idleTop",
+    IdleRight = "idleTop",
+    IdleBottom = "idleTop",
+}
 
 type ctor<T = unknown> = new (...args: any[]) => T

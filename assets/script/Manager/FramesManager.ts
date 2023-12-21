@@ -69,7 +69,7 @@ export class FramesManager {
     static keepFrames() {
         const frame = this.framesModel.pendingFrames.shift()
         const pendingFramesLen = this.framesModel.pendingFrames.length
-        console.log(`当前追溯帧:`, frame, "剩余等待帧数量:", pendingFramesLen)
+        // console.log(`当前追溯帧:`, frame, "剩余等待帧数量:", pendingFramesLen)
 
         // 同步完成修正状态
         if (pendingFramesLen <= 0) {
@@ -137,7 +137,7 @@ export class FramesManager {
                 const userUuid = ModelsManager.getModel(UserInfoModel).userUuid
                 for (const info of inputs.playerJoin) {
                     let playerEntity: BaseEntity
-                    const config = entityConfig.playerEntityConfig
+                    const config = entityConfig.get(info.player.role)
                     if (info.player.uuid == userUuid) {
                         // 自己本人
                         playerEntity = EntityManager.createEntity(config, [InputComponent])
