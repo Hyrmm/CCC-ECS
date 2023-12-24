@@ -12,6 +12,7 @@ import { SystemManager } from "./Manager/SystemManager"
 
 import { Layer } from './Type'
 import { _decorator, Component, Node, Input, input, game, Game } from 'cc'
+import { UiManager } from './Manager/UiManager'
 const { ccclass, property } = _decorator
 
 @ccclass
@@ -19,6 +20,10 @@ export class Main extends Component {
 
     @property(Node)
     playerLayer: Node = null
+
+    @property(Node)
+    uiLayer: Node = null
+
 
 
 
@@ -38,6 +43,7 @@ export class Main extends Component {
             this.initEntityManager()
             this.initGameEvent()
             this.initInputListener()
+            UiManager.openUiView("LoginView")
         })
     }
 
@@ -75,7 +81,10 @@ export class Main extends Component {
 
     //** 层级管理器初始化 */
     private initLayerManager() {
-        const layerList = [{ id: Layer.EnumLayerId.PlayerLayer, layer: this.playerLayer }]
+        const layerList = [
+            { id: Layer.EnumLayerId.UiLayer, layer: this.uiLayer },
+            { id: Layer.EnumLayerId.PlayerLayer, layer: this.playerLayer },
+        ]
         LayerManager.init(layerList)
     }
 
